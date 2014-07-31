@@ -36,15 +36,25 @@ import java.util.ArrayList;
  */
 public class SerializablePath implements Serializable, Comparable<SerializablePath> {
 
-    private Path.FillType mFillType = Path.FillType.WINDING;
-    private ArrayList<AbstractPathOp> mOperations = new ArrayList<AbstractPathOp>();
+    private Path.FillType mFillType;
+    private ArrayList<AbstractPathOp> mOperations;
 
+    /**
+     * Create a new path, copying the contents from the src path.
+     *
+     * @param path The path to copy from when initializing the new path
+     */
     public SerializablePath(SerializablePath path) {
         this();
-        //TODO do last after all other methods are accounted for
+        set(path);
     }
 
+    /**
+     * Create an empty path
+     */
     public SerializablePath() {
+        mFillType = Path.FillType.WINDING;
+        mOperations = new ArrayList<AbstractPathOp>();
     }
 
     /**
@@ -110,7 +120,6 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     private void addPath(SerializablePath path, Matrix matrix) {
-        //TODO needs impl
         //Matrix isn't Serializable!!! Do we support this method?
         throw new UnsupportedOperationException("Needs implementation");
     }
@@ -501,13 +510,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     private void transform(Matrix matrix, SerializablePath dst) {
         //TODO needs impl
         //Uses Matrix, which isn't Serializable!!!
-        throw new UnsupportedOperationException("Needs implementation");
     }
 
     private void transform(Matrix matrix) {
         //TODO needs impl
         //Uses Matrix, which isn't Serializable!!!
-        throw new UnsupportedOperationException("Needs implementation");
     }
 
     /**
@@ -515,8 +522,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @return a generated Path
      */
     public Path makePath() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        Path path = new Path();
+        for(AbstractPathOp op : mOperations) {
+            op.applyToPath(path);
+        }
+        return path;
     }
 
     @Override
