@@ -138,9 +138,15 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Returns true if the filltype is one of the INVERSE variants
+     *
+     * @see android.graphics.Path#isInverseFillType()
+     *
+     * @return true if the filltype is one of the INVERSE variants
+     */
     public boolean isInverseFillType() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        return mFillType == Path.FillType.INVERSE_EVEN_ODD || mFillType == Path.FillType.INVERSE_WINDING;
     }
 
     public void lineTo(float x, float y) {
@@ -214,9 +220,19 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Toggles the INVERSE state of the filltype
+     *
+     * @see android.graphics.Path#toggleInverseFillType()
+     */
     public void toggleInverseFillType() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        switch (mFillType) {
+            case WINDING: mFillType = Path.FillType.INVERSE_WINDING; break;
+            case EVEN_ODD: mFillType = Path.FillType.INVERSE_EVEN_ODD; break;
+            case INVERSE_WINDING: mFillType = Path.FillType.WINDING; break;
+            case INVERSE_EVEN_ODD: mFillType = Path.FillType.EVEN_ODD; break;
+            default: mFillType = Path.FillType.WINDING; break;
+        }
     }
 
     private void transform(Matrix matrix, SerializablePath dst) {
