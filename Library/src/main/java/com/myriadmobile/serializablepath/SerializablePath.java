@@ -48,8 +48,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void addArc(RectF oval, float startAngle, float sweepAngle) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddArcOp(oval, startAngle, sweepAngle));
     }
 
     public void addCircle(float x, float y, float radius, Path.Direction dir) {
@@ -61,13 +60,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void addPath(SerializablePath src, float dx, float dy) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddPathOp(src, dx, dy));
     }
 
     public void addPath(SerializablePath path) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddPathOp(path));
     }
 
     private void addPath(SerializablePath path, Matrix matrix) {
@@ -77,13 +74,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void addRect(float left, float top, float right, float bottom, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddRectOp(left, top, right, bottom, dir));
     }
 
     public void addRect(RectF rect, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddRectOp(rect, dir));
     }
 
     public void addRoundRect(RectF rect, float[] radii, Path.Direction dir) {
@@ -97,13 +92,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void arcTo(RectF oval, float startAngle, float sweepAngle) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new ArcToOp(oval, startAngle, sweepAngle));
     }
 
     public void arcTo(RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new ArcToOp(oval, startAngle, sweepAngle, forceMoveTo));
     }
 
     /* TODO Unimplemented methods
