@@ -27,33 +27,45 @@ package com.myriadmobile.serializablepath;
 import android.graphics.Path;
 
 /**
- * @see Path#lineTo(float, float)
+ * @see android.graphics.Path#cubicTo(float, float, float, float, float, float)
  */
-public class LineToOp extends AbstractPathOp {
+public class CubicToOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
+    private final float x1;
+    private final float y1;
+    private final float x2;
+    private final float y2;
+    private final float x3;
+    private final float y3;
     private final Boolean r;
 
-    public LineToOp(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public CubicToOp(float x1, float y1, float x2, float y2, float x3, float y3) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
         this.r = null;
     }
 
-    public LineToOp(float dx, float dy, boolean r) {
-        this.x = dx;
-        this.y = dy;
-        this.r = true;
+    public CubicToOp(float x1, float y1, float x2, float y2, float x3, float y3, boolean r) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
+        this.r = r;
     }
 
     @Override
     void applyToPath(Path path) {
         if(r == null) {
-            path.lineTo(x, y);
+            path.cubicTo(x1, y1, x2, y2, x3, y3);
         }
         else {
-            path.rLineTo(x, y);
+            path.rCubicTo(x1, y1, x2, y2, x3, y3);
         }
     }
 }

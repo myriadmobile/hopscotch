@@ -25,35 +25,27 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.graphics.RectF;
 
 /**
- * @see Path#lineTo(float, float)
+ * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float, float, android.graphics.Path.Direction)
  */
-public class LineToOp extends AbstractPathOp {
+public class AddRoundRectXYOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
-    private final Boolean r;
+    private final RectF rect;
+    private final float rx;
+    private final float ry;
+    private final Path.Direction dir;
 
-    public LineToOp(float x, float y) {
-        this.x = x;
-        this.y = y;
-        this.r = null;
-    }
-
-    public LineToOp(float dx, float dy, boolean r) {
-        this.x = dx;
-        this.y = dy;
-        this.r = true;
+    public AddRoundRectXYOp(RectF rect, float rx, float ry, Path.Direction dir) {
+        this.rect = rect;
+        this.rx = rx;
+        this.ry = ry;
+        this.dir = dir;
     }
 
     @Override
     void applyToPath(Path path) {
-        if(r == null) {
-            path.lineTo(x, y);
-        }
-        else {
-            path.rLineTo(x, y);
-        }
+        path.addRoundRect(rect, rx, ry, dir);
     }
 }

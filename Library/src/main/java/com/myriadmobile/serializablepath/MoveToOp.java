@@ -33,14 +33,27 @@ public class MoveToOp extends AbstractPathOp {
 
     private final float x;
     private final float y;
+    private final Boolean r;
 
     public MoveToOp(float x, float y) {
         this.x = x;
         this.y = y;
+        this.r = null;
+    }
+
+    public MoveToOp(float dx, float dy, boolean r) {
+        this.x = dx;
+        this.y = dy;
+        this.r = r;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.moveTo(x, y);
+        if(r == null) {
+            path.moveTo(x, y);
+        }
+        else {
+            path.rMoveTo(x, y);
+        }
     }
 }

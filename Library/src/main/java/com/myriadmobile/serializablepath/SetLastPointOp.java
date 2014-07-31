@@ -27,33 +27,20 @@ package com.myriadmobile.serializablepath;
 import android.graphics.Path;
 
 /**
- * @see Path#lineTo(float, float)
+ * @see android.graphics.Path#setLastPoint(float, float)
  */
-public class LineToOp extends AbstractPathOp {
+public class SetLastPointOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
-    private final Boolean r;
+    private final float dx;
+    private final float dy;
 
-    public LineToOp(float x, float y) {
-        this.x = x;
-        this.y = y;
-        this.r = null;
-    }
-
-    public LineToOp(float dx, float dy, boolean r) {
-        this.x = dx;
-        this.y = dy;
-        this.r = true;
+    public SetLastPointOp(float dx, float dy) {
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
     void applyToPath(Path path) {
-        if(r == null) {
-            path.lineTo(x, y);
-        }
-        else {
-            path.rLineTo(x, y);
-        }
+        path.setLastPoint(dx, dy);
     }
 }

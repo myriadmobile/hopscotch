@@ -27,33 +27,39 @@ package com.myriadmobile.serializablepath;
 import android.graphics.Path;
 
 /**
- * @see Path#lineTo(float, float)
+ * @see android.graphics.Path#quadTo(float, float, float, float)
  */
-public class LineToOp extends AbstractPathOp {
+public class QuadToOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
+    private final float x1;
+    private final float y1;
+    private final float x2;
+    private final float y2;
     private final Boolean r;
 
-    public LineToOp(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public QuadToOp(float x1, float y1, float x2, float y2) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
         this.r = null;
     }
 
-    public LineToOp(float dx, float dy, boolean r) {
-        this.x = dx;
-        this.y = dy;
-        this.r = true;
+    public QuadToOp(float x1, float y1, float x2, float y2, boolean r) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.r = r;
     }
 
     @Override
     void applyToPath(Path path) {
         if(r == null) {
-            path.lineTo(x, y);
+            path.quadTo(x1, y1, x2, y2);
         }
         else {
-            path.rLineTo(x, y);
+            path.rQuadTo(x1, y1, x2, y2);
         }
     }
 }

@@ -163,8 +163,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the round-rectangle's contour
      */
     public void addRoundRect(RectF rect, float[] radii, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddRoundRectOp(rect, radii, dir));
     }
 
     /**
@@ -178,8 +177,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the round-rectangle's contour
      */
     public void addRoundRect(RectF rect, float rx, float ry, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddRoundRectXYOp(rect, rx, ry, dir));
     }
 
 
@@ -249,8 +247,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y3 The y-coordinate of the end point on a cubic curve
      */
     public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new CubicToOp(x1, y1, x2, y2, x3, y3));
     }
 
     /**
@@ -339,8 +336,13 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *            the original path is modified.
      */
     public void offset(float dx, float dy, SerializablePath path) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        if(path == null) {
+            offset(dx, dy);
+        }
+        else {
+            path.set(this);
+            path.offset(dx, dy);
+        }
     }
     /**
      * Offset the path by (dx,dy), returning true on success
@@ -351,8 +353,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dy The amount in the Y direction to offset the entire path
      */
     public void offset(float dx, float dy) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new OffsetOp(dx, dy));
     }
 
     /**
@@ -368,8 +369,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y2 The y-coordinate of the end point on a quadratic curve
      */
     public void quadTo(float x1, float y1, float x2, float y2) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new QuadToOp(x1, y1, x2, y2));
     }
 
     /**
@@ -378,8 +378,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * moveTo(0,0) is inserted automatically.
      */
     public void rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new CubicToOp(x1, y1, x2, y2, x3, y3, true));
     }
 
     /**
@@ -395,8 +394,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *           this contour, to specify a line
      */
     public void rLineTo(float dx, float dy) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new LineToOp(dx, dy, true));
     }
 
     /**
@@ -412,8 +410,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *           previous contour, to specify the start of a new contour
      */
     public void rMoveTo(float dx, float dy) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new MoveToOp(dx, dy, true));
     }
 
     /**
@@ -433,8 +430,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *            this contour, for the end point of a quadratic curve
      */
     public void rQuadTo(float dx1, float dy1, float dx2, float dy2) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new QuadToOp(dx1, dy1, dx2, dy2, true));
     }
 
     /**
@@ -488,8 +484,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dy The new Y coordinate for the last point
      */
     public void setLastPoint(float dx, float dy) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new SetLastPointOp(dx, dy));
     }
 
     /**
