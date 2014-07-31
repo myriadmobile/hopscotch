@@ -525,9 +525,29 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     @Override
+    public boolean equals(Object o) {
+        if(o == this) {
+            return true;
+        }
+        if(o instanceof SerializablePath) {
+            SerializablePath other = (SerializablePath) o;
+            if(this.mOperations.size() == other.mOperations.size()) {
+                return this.mOperations.equals(other.mOperations);
+            }
+            else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param path Path to compare to
+     * @return negative if this path has more ops, positive otherwise
+     */
+    @Override
     public int compareTo(SerializablePath path) {
-        //TODO needs impl
-        return 0;
+        return mOperations.size() - path.mOperations.size();
     }
 
 
