@@ -47,22 +47,64 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     public SerializablePath() {
     }
 
+    /**
+     * Add the specified arc to the path as a new contour.
+     *
+     * @see android.graphics.Path#addArc(android.graphics.RectF, float, float)
+     *
+     * @param oval The bounds of oval defining the shape and size of the arc
+     * @param startAngle Starting angle (in degrees) where the arc begins
+     * @param sweepAngle Sweep angle (in degrees) measured clockwise
+     */
     public void addArc(RectF oval, float startAngle, float sweepAngle) {
         mOperations.add(new AddArcOp(oval, startAngle, sweepAngle));
     }
 
+    /**
+     * Add a closed circle contour to the path
+     *
+     * @see android.graphics.Path#addCircle(float, float, float, android.graphics.Path.Direction)
+     *
+     * @param x   The x-coordinate of the center of a circle to add to the path
+     * @param y   The y-coordinate of the center of a circle to add to the path
+     * @param radius The radius of a circle to add to the path
+     * @param dir    The direction to wind the circle's contour
+     */
     public void addCircle(float x, float y, float radius, Path.Direction dir) {
         mOperations.add(new AddCircleOp(x, y, radius, dir));
     }
 
+    /**
+     * Add a closed oval contour to the path
+     *
+     * @see android.graphics.Path#addOval(android.graphics.RectF, android.graphics.Path.Direction)
+     *
+     * @param oval The bounds of the oval to add as a closed contour to the path
+     * @param dir  The direction to wind the oval's contour
+     */
     public void addOval(RectF oval, Path.Direction dir) {
         mOperations.add(new AddOvalOp(oval, dir));
     }
 
+    /**
+     * Add a copy of src to the path, offset by (dx,dy)
+     *
+     * @see android.graphics.Path#addPath(android.graphics.Path, float, float)
+     *
+     * @param src The path to add as a new contour
+     * @param dx  The amount to translate the path in X as it is added
+     */
     public void addPath(SerializablePath src, float dx, float dy) {
         mOperations.add(new AddPathOp(src, dx, dy));
     }
 
+    /**
+     * Add a copy of src to the path
+     *
+     * @see android.graphics.Path#addPath(android.graphics.Path)
+     *
+     * @param path The path that is appended to the current path
+     */
     public void addPath(SerializablePath path) {
         mOperations.add(new AddPathOp(path));
     }
@@ -73,28 +115,97 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Add a closed rectangle contour to the path
+     *
+     * @see android.graphics.Path#addRect(float, float, float, float, android.graphics.Path.Direction)
+     *
+     * @param left   The left side of a rectangle to add to the path
+     * @param top    The top of a rectangle to add to the path
+     * @param right  The right side of a rectangle to add to the path
+     * @param bottom The bottom of a rectangle to add to the path
+     * @param dir    The direction to wind the rectangle's contour
+     */
     public void addRect(float left, float top, float right, float bottom, Path.Direction dir) {
         mOperations.add(new AddRectOp(left, top, right, bottom, dir));
     }
 
+    /**
+     * Add a closed rectangle contour to the path
+     *
+     * @see android.graphics.Path#addRect(android.graphics.RectF, android.graphics.Path.Direction)
+     *
+     * @param rect The rectangle to add as a closed contour to the path
+     * @param dir  The direction to wind the rectangle's contour
+     */
     public void addRect(RectF rect, Path.Direction dir) {
         mOperations.add(new AddRectOp(rect, dir));
     }
 
+    /**
+     * Add a closed round-rectangle contour to the path. Each corner receives
+     * two radius values [X, Y]. The corners are ordered top-left, top-right,
+     * bottom-right, bottom-left
+     *
+     * @see Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
+     *
+     * @param rect The bounds of a round-rectangle to add to the path
+     * @param radii Array of 8 values, 4 pairs of [X,Y] radii
+     * @param dir  The direction to wind the round-rectangle's contour
+     */
     public void addRoundRect(RectF rect, float[] radii, Path.Direction dir) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Add a closed round-rectangle contour to the path
+     *
+     * @see Path#addRoundRect(android.graphics.RectF, float, float, android.graphics.Path.Direction)
+     *
+     * @param rect The bounds of a round-rectangle to add to the path
+     * @param rx   The x-radius of the rounded corners on the round-rectangle
+     * @param ry   The y-radius of the rounded corners on the round-rectangle
+     * @param dir  The direction to wind the round-rectangle's contour
+     */
     public void addRoundRect(RectF rect, float rx, float ry, Path.Direction dir) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+
+    /**
+     * Append the specified arc to the path as a new contour. If the start of
+     * the path is different from the path's current last point, then an
+     * automatic lineTo() is added to connect the current contour to the
+     * start of the arc. However, if the path is empty, then we call moveTo()
+     * with the first point of the arc.
+     *
+     * @see android.graphics.Path#arcTo(android.graphics.RectF, float, float)
+     *
+     * @param oval        The bounds of oval defining shape and size of the arc
+     * @param startAngle  Starting angle (in degrees) where the arc begins
+     * @param sweepAngle  Sweep angle (in degrees) measured clockwise
+     */
     public void arcTo(RectF oval, float startAngle, float sweepAngle) {
         mOperations.add(new ArcToOp(oval, startAngle, sweepAngle));
     }
 
+    /**
+     * Append the specified arc to the path as a new contour. If the start of
+     * the path is different from the path's current last point, then an
+     * automatic lineTo() is added to connect the current contour to the
+     * start of the arc. However, if the path is empty, then we call moveTo()
+     * with the first point of the arc. The sweep angle is tread mod 360.
+     *
+     * @see Path#arcTo(android.graphics.RectF, float, float, boolean)
+     *
+     * @param oval        The bounds of oval defining shape and size of the arc
+     * @param startAngle  Starting angle (in degrees) where the arc begins
+     * @param sweepAngle  Sweep angle (in degrees) measured clockwise, treated
+     *                    mod 360.
+     * @param forceMoveTo If true, always begin a new contour with the arc
+     */
     public void arcTo(RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo) {
         mOperations.add(new ArcToOp(oval, startAngle, sweepAngle, forceMoveTo));
     }
@@ -114,6 +225,20 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         mOperations.add(new CloseOp());
     }
 
+    /**
+     * Add a cubic bezier from the last point, approaching control points
+     * (x1,y1) and (x2,y2), and ending at (x3,y3). If no moveTo() call has been
+     * made for this contour, the first point is automatically set to (0,0).
+     *
+     * @see Path#cubicTo(float, float, float, float, float, float)
+     *
+     * @param x1 The x-coordinate of the 1st control point on a cubic curve
+     * @param y1 The y-coordinate of the 1st control point on a cubic curve
+     * @param x2 The x-coordinate of the 2nd control point on a cubic curve
+     * @param y2 The y-coordinate of the 2nd control point on a cubic curve
+     * @param x3 The x-coordinate of the end point on a cubic curve
+     * @param y3 The y-coordinate of the end point on a cubic curve
+     */
     public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
@@ -168,39 +293,136 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         return mFillType == Path.FillType.INVERSE_EVEN_ODD || mFillType == Path.FillType.INVERSE_WINDING;
     }
 
+    /**
+     * Add a line from the last point to the specified point (x,y).
+     * If no moveTo() call has been made for this contour, the first point is
+     * automatically set to (0,0).
+     *
+     * @see android.graphics.Path#lineTo(float, float)
+     *
+     * @param x The x-coordinate of the end of a line
+     * @param y The y-coordinate of the end of a line
+     */
     public void lineTo(float x, float y) {
         mOperations.add(new LineToOp(x, y));
     }
 
+    /**
+     * Set the beginning of the next contour to the point (x,y).
+     *
+     * @see android.graphics.Path#moveTo(float, float)
+     *
+     * @param x The x-coordinate of the start of a new contour
+     * @param y The y-coordinate of the start of a new contour
+     */
     public void moveTo(float x, float y) {
         mOperations.add(new MoveToOp(x, y));
     }
 
+    /**
+     * Offset the path by (dx,dy), returning true on success
+     *
+     * @see android.graphics.Path#offset(float, float, android.graphics.Path)
+     *
+     * @param dx  The amount in the X direction to offset the entire path
+     * @param dy  The amount in the Y direction to offset the entire path
+     * @param path The translated path is written here. If this is null, then
+     *            the original path is modified.
+     */
     public void offset(float dx, float dy, SerializablePath path) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
+    /**
+     * Offset the path by (dx,dy), returning true on success
+     *
+     * @see android.graphics.Path#offset(float, float)
+     *
+     * @param dx The amount in the X direction to offset the entire path
+     * @param dy The amount in the Y direction to offset the entire path
+     */
+    public void offset(float dx, float dy) {
+        //TODO needs impl
+        throw new UnsupportedOperationException("Needs implementation");
+    }
 
+    /**
+     * Add a quadratic bezier from the last point, approaching control point
+     * (x1,y1), and ending at (x2,y2). If no moveTo() call has been made for
+     * this contour, the first point is automatically set to (0,0).
+     *
+     * @see Path#quadTo(float, float, float, float)
+     *
+     * @param x1 The x-coordinate of the control point on a quadratic curve
+     * @param y1 The y-coordinate of the control point on a quadratic curve
+     * @param x2 The x-coordinate of the end point on a quadratic curve
+     * @param y2 The y-coordinate of the end point on a quadratic curve
+     */
     public void quadTo(float x1, float y1, float x2, float y2) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Same as cubicTo, but the coordinates are considered relative to the
+     * current point on this contour. If there is no previous point, then a
+     * moveTo(0,0) is inserted automatically.
+     */
     public void rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Same as lineTo, but the coordinates are considered relative to the last
+     * point on this contour. If there is no previous point, then a moveTo(0,0)
+     * is inserted automatically.
+     *
+     * @see android.graphics.Path#rLineTo(float, float)
+     *
+     * @param dx The amount to add to the x-coordinate of the previous point on
+     *           this contour, to specify a line
+     * @param dy The amount to add to the y-coordinate of the previous point on
+     *           this contour, to specify a line
+     */
     public void rLineTo(float dx, float dy) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Set the beginning of the next contour relative to the last point on the
+     * previous contour. If there is no previous contour, this is treated the
+     * same as moveTo().
+     *
+     * @see android.graphics.Path#rMoveTo(float, float)
+     *
+     * @param dx The amount to add to the x-coordinate of the end of the
+     *           previous contour, to specify the start of a new contour
+     * @param dy The amount to add to the y-coordinate of the end of the
+     *           previous contour, to specify the start of a new contour
+     */
     public void rMoveTo(float dx, float dy) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Same as quadTo, but the coordinates are considered relative to the last
+     * point on this contour. If there is no previous point, then a moveTo(0,0)
+     * is inserted automatically.
+     *
+     * @see Path#rQuadTo(float, float, float, float)
+     *
+     * @param dx1 The amount to add to the x-coordinate of the last point on
+     *            this contour, for the control point of a quadratic curve
+     * @param dy1 The amount to add to the y-coordinate of the last point on
+     *            this contour, for the control point of a quadratic curve
+     * @param dx2 The amount to add to the x-coordinate of the last point on
+     *            this contour, for the end point of a quadratic curve
+     * @param dy2 The amount to add to the y-coordinate of the last point on
+     *            this contour, for the end point of a quadratic curve
+     */
     public void rQuadTo(float dx1, float dy1, float dx2, float dy2) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
@@ -227,7 +449,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     public void rewind() {
         mOperations.clear();
     }
-
+    /**
+     * Replace the contents of this with the contents of src.
+     *
+     * @see Path#set(android.graphics.Path)
+     */
     public void set(SerializablePath path) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
@@ -244,6 +470,14 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         this.mFillType = ft;
     }
 
+    /**
+     * Sets the last point of the path.
+     *
+     * @see Path#setLastPoint(float, float)
+     *
+     * @param dx The new X coordinate for the last point
+     * @param dy The new Y coordinate for the last point
+     */
     public void setLastPoint(float dx, float dy) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
@@ -276,6 +510,10 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Generate a {@link android.graphics.Path}
+     * @return a generated Path
+     */
     public Path makePath() {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
