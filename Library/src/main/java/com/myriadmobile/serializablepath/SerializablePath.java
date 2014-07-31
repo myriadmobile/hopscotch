@@ -35,7 +35,11 @@ import java.io.Serializable;
  */
 public class SerializablePath implements Serializable, Comparable<SerializablePath> {
 
+    private Path.FillType mFillType = Path.FillType.WINDING;
+
     public SerializablePath(SerializablePath path) {
+        this();
+        //TODO do last after all other methods are accounted for
     }
 
     public SerializablePath() {
@@ -112,9 +116,16 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Return the path's fill type. This defines how "inside" is
+     * computed. The default value is WINDING.
+     *
+     * @see android.graphics.Path#getFillType()
+     *
+     * @return the path's fill type
+     */
     public Path.FillType getFillType() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        return mFillType;
     }
 
     public void incReserve(int extraPtCount) {
@@ -187,9 +198,15 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Set the path's fill type. This defines how "inside" is computed.
+     *
+     * @see Path#setFillType(android.graphics.Path.FillType)
+     *
+     * @param ft The new fill type for this path
+     */
     public void setFillType(Path.FillType ft) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        this.mFillType = ft;
     }
 
     public void setLastPoint(float dx, float dy) {
