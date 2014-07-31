@@ -29,6 +29,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * A {@link java.io.Serializable} and {@link java.lang.Comparable} implementation of {@link android.graphics.Path}
@@ -36,6 +37,7 @@ import java.io.Serializable;
 public class SerializablePath implements Serializable, Comparable<SerializablePath> {
 
     private Path.FillType mFillType = Path.FillType.WINDING;
+    private ArrayList<AbstractPathOp> mOperations = new ArrayList<AbstractPathOp>();
 
     public SerializablePath(SerializablePath path) {
         this();
@@ -128,14 +130,30 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         return mFillType;
     }
 
+    /**
+     * Hint to the path to prepare for adding more points. This can allow the
+     * path to more efficiently allocate its storage.
+     *
+     * This implementation increases the size of the backing {@link java.util.ArrayList}
+     *
+     * @see Path#incReserve(int)
+     *
+     * @param extraPtCount The number of extra points that may be added to this
+     *                     path
+     */
     public void incReserve(int extraPtCount) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.ensureCapacity(mOperations.size() + (extraPtCount/2));
     }
 
+    /**
+     * Returns true if the path is empty (contains no lines or curves)
+     *
+     * @see android.graphics.Path#isEmpty()
+     *
+     * @return true if the path is empty (contains no lines or curves)
+     */
     public boolean isEmpty() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        return mOperations.isEmpty();
     }
 
     /**
@@ -189,14 +207,26 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         throw new UnsupportedOperationException("Needs implementation");
     }
 
+    /**
+     * Clear any lines and curves from the path, making it empty.
+     * This does NOT change the fill-type setting.
+     *
+     * @see android.graphics.Path#reset()
+     */
     public void reset() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.clear();
     }
 
+    /**
+     * Rewinds the path: clears any lines and curves from the path but
+     * keeps the internal data structure for faster reuse.
+     *
+     * This implementation is the same as {@link #reset()}
+     *
+     * @see android.graphics.Path#reset()
+     */
     public void rewind() {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.clear();
     }
 
     public void set(SerializablePath path) {
