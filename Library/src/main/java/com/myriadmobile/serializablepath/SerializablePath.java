@@ -53,13 +53,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void addCircle(float x, float y, float radius, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddCircleOp(x, y, radius, dir));
     }
 
     public void addOval(RectF oval, Path.Direction dir) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new AddOvalOp(oval, dir));
     }
 
     public void addPath(SerializablePath src, float dx, float dy) {
@@ -178,13 +176,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     public void lineTo(float x, float y) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new LineToOp(x, y));
     }
 
     public void moveTo(float x, float y) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        mOperations.add(new MoveToOp(x, y));
     }
 
     public void offset(float dx, float dy, SerializablePath path) {
