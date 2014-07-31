@@ -113,6 +113,16 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     * isRect(RectF)
     */
 
+    /**
+     * Close the current contour. If the current point is not equal to the
+     * first point of the contour, a line segment is automatically added.
+     *
+     * @see android.graphics.Path#close()
+     */
+    public void close() {
+        mOperations.add(new CloseOp());
+    }
+
     public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
         //TODO needs impl
         throw new UnsupportedOperationException("Needs implementation");
