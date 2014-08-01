@@ -122,9 +122,16 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         mOperations.add(new AddPathOp(path));
     }
 
-    private void addPath(SerializablePath path, Matrix matrix) {
-        //Matrix isn't Serializable!!! Do we support this method?
-        throw new UnsupportedOperationException("Needs implementation");
+    /**
+     * Add a copy of src to the path, transformed by matrix
+     *
+     * @see android.graphics.Path#addPath(android.graphics.Path, android.graphics.Matrix)
+     *
+     * @param path The path to add as a new contour
+     * @param matrix matrix to use for transform
+     */
+    public void addPath(SerializablePath path, Matrix matrix) {
+        mOperations.add(new AddPathOp(path, matrix));
     }
 
     /**
@@ -457,6 +464,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     public void rewind() {
         mOperations.clear();
     }
+
     /**
      * Replace the contents of this with the contents of src.
      *
@@ -505,14 +513,35 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         }
     }
 
-    private void transform(Matrix matrix, SerializablePath dst) {
-        //TODO needs impl
-        //Uses Matrix, which isn't Serializable!!!
+    /**
+     * Transform the points in this path by matrix, and write the answer
+     * into dst. If dst is null, then the the original path is modified.
+     *
+     * @see android.graphics.Path#transform(android.graphics.Matrix, android.graphics.Path)
+     *
+     * @param matrix The matrix to apply to the path
+     * @param dst    The transformed path is written here. If dst is null,
+     *               then the the original path is modified
+     */
+    public void transform(Matrix matrix, SerializablePath dst) {
+        if(dst == null) {
+            transform(matrix);
+        }
+        else {
+            dst.set(this);
+            dst.transform(matrix);
+        }
     }
 
-    private void transform(Matrix matrix) {
-        //TODO needs impl
-        //Uses Matrix, which isn't Serializable!!!
+    /**
+     * Transform the points in this path by matrix.
+     *
+     * @see android.graphics.Path#transform(android.graphics.Matrix)
+     *
+     * @param matrix The matrix to apply to the path
+     */
+    public void transform(Matrix matrix) {
+        mOperations.add(new TransformOp(matrix));
     }
 
     /**

@@ -28,42 +28,21 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 
 /**
- * @see android.graphics.Path#addPath(android.graphics.Path, float, float)
- *
- * @see android.graphics.Path#addPath(android.graphics.Path)
+ * @see Path#transform(android.graphics.Matrix)
  */
-public class AddPathOp extends AbstractPathOp {
+public class TransformOp extends AbstractPathOp {
 
-    private final SerializablePath sPath;
-    private final Float dx;
-    private final Float dy;
+    private float[] values;
 
-    public AddPathOp(SerializablePath path, float dx, float dy) {
-        this.sPath = path;
-        this.dx = dx;
-        this.dy = dy;
-    }
-
-    public AddPathOp(SerializablePath path) {
-        this.sPath = path;
-        this.dx = null;
-        this.dy = null;
-    }
-
-    public AddPathOp(SerializablePath path, Matrix matrix) {
-        this.sPath = new SerializablePath(path);
-        sPath.transform(matrix);
-        this.dx = null;
-        this.dy = null;
+    public TransformOp(Matrix matrix) {
+        values = new float[9];
+        matrix.getValues(values);
     }
 
     @Override
     void applyToPath(Path path) {
-        if(dx != null && dy != null) {
-            path.addPath(sPath.makePath(), dx, dy);
-        }
-        else {
-            path.addPath(sPath.makePath());
-        }
+        Matrix matrix = new Matrix();
+        matrix.setValues(values);
+        path.transform(matrix);
     }
 }
