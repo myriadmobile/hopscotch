@@ -25,6 +25,7 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see Path#addCircle(float, float, float, android.graphics.Path.Direction)
@@ -37,14 +38,31 @@ public class AddCircleOp extends AbstractPathOp {
     private final Path.Direction dir;
 
     public AddCircleOp(float x, float y, float radius, Path.Direction dir) {
+        super(null);
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.dir = dir;
     }
 
+    protected AddCircleOp(Parcel parcel) {
+        super(parcel);
+        x = parcel.readFloat();
+        y = parcel.readFloat();
+        radius = parcel.readFloat();
+        dir = Path.Direction.values()[parcel.readInt()];
+    }
+
     @Override
     void applyToPath(Path path) {
         path.addCircle(x, y, radius, dir);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeFloat(x);
+        parcel.writeFloat(y);
+        parcel.writeFloat(radius);
+        parcel.writeInt(dir.ordinal());
     }
 }

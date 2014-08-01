@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see Path#transform(android.graphics.Matrix)
@@ -35,8 +36,14 @@ public class TransformOp extends AbstractPathOp {
     private float[] values;
 
     public TransformOp(Matrix matrix) {
+        super(null);
         values = new float[9];
         matrix.getValues(values);
+    }
+
+    protected TransformOp(Parcel parcel) {
+        super(parcel);
+        parcel.readFloatArray(values);
     }
 
     @Override
@@ -44,5 +51,10 @@ public class TransformOp extends AbstractPathOp {
         Matrix matrix = new Matrix();
         matrix.setValues(values);
         path.transform(matrix);
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel) {
+        parcel.writeFloatArray(values);
     }
 }

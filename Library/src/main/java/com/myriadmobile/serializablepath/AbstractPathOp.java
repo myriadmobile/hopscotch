@@ -25,13 +25,48 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Abstract class to holds information about different ops made onto
  * a {@link com.myriadmobile.serializablepath.SerializablePath} so it can be
  * serialized out and recreated later
  */
-abstract class AbstractPathOp {
+abstract class AbstractPathOp implements Parcelable {
+
+    public static final Creator<AbstractPathOp> CREATOR = new Creator<AbstractPathOp>() {
+
+        @Override
+        public AbstractPathOp createFromParcel(Parcel parcel) {
+            try {
+                return (AbstractPathOp) Class.forName(parcel.readString()).getConstructor(Parcel.class).newInstance(parcel);
+            } catch (Exception e) {
+                throw new RuntimeException("This shouldn't be a thing", e);
+            }
+        }
+
+        @Override
+        public AbstractPathOp[] newArray(int i) {
+            return new AbstractPathOp[i];
+        }
+    };
+
+    protected AbstractPathOp(Parcel parcel) {
+        //Here so subclasses are required to implement this constructor
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(getClass().getCanonicalName());
+        writeToParcel(parcel);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     abstract void applyToPath(Path path);
+    abstract void writeToParcel(Parcel parcel);
 }

@@ -25,6 +25,7 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#cubicTo(float, float, float, float, float, float)
@@ -40,6 +41,7 @@ public class CubicToOp extends AbstractPathOp {
     private final Boolean r;
 
     public CubicToOp(float x1, float y1, float x2, float y2, float x3, float y3) {
+        super(null);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -50,6 +52,7 @@ public class CubicToOp extends AbstractPathOp {
     }
 
     public CubicToOp(float x1, float y1, float x2, float y2, float x3, float y3, boolean r) {
+        super(null);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -57,6 +60,18 @@ public class CubicToOp extends AbstractPathOp {
         this.x3 = x3;
         this.y3 = y3;
         this.r = r;
+    }
+
+    public CubicToOp(Parcel parcel) {
+        super(parcel);
+
+        x1 = parcel.readFloat();
+        y1 = parcel.readFloat();
+        x2 = parcel.readFloat();
+        y2 = parcel.readFloat();
+        x3 = parcel.readFloat();
+        y3 = parcel.readFloat();
+        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
@@ -67,5 +82,16 @@ public class CubicToOp extends AbstractPathOp {
         else {
             path.rCubicTo(x1, y1, x2, y2, x3, y3);
         }
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeFloat(x1);
+        parcel.writeFloat(y1);
+        parcel.writeFloat(x2);
+        parcel.writeFloat(y2);
+        parcel.writeFloat(x3);
+        parcel.writeFloat(y3);
+        parcel.writeValue(r);
     }
 }

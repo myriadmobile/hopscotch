@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#addRect(android.graphics.RectF, android.graphics.Path.Direction)
@@ -36,17 +37,32 @@ public class AddRectOp extends AbstractPathOp {
     private final Path.Direction dir;
 
     public AddRectOp(RectF rect, Path.Direction dir) {
+        super(null);
         this.rect = rect;
         this.dir = dir;
     }
 
     public AddRectOp(float left, float top, float right, float bottom, Path.Direction dir) {
+        super(null);
         this.rect = new RectF(left, top, right, bottom);
         this.dir = dir;
+    }
+
+    protected AddRectOp(Parcel parcel) {
+        super(parcel);
+
+        rect = parcel.readParcelable(RectF.class.getClassLoader());
+        dir = Path.Direction.values()[parcel.readInt()];
     }
 
     @Override
     void applyToPath(Path path) {
         path.addRect(rect, dir);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(rect, 0);
+        parcel.writeInt(dir.ordinal());
     }
 }

@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#addPath(android.graphics.Path, float, float)
@@ -39,22 +40,33 @@ public class AddPathOp extends AbstractPathOp {
     private final Float dy;
 
     public AddPathOp(SerializablePath path, float dx, float dy) {
+        super(null);
         this.sPath = path;
         this.dx = dx;
         this.dy = dy;
     }
 
     public AddPathOp(SerializablePath path) {
+        super(null);
         this.sPath = path;
         this.dx = null;
         this.dy = null;
     }
 
     public AddPathOp(SerializablePath path, Matrix matrix) {
+        super(null);
         this.sPath = new SerializablePath(path);
         sPath.transform(matrix);
         this.dx = null;
         this.dy = null;
+    }
+
+    public AddPathOp(Parcel parcel) {
+        super(parcel);
+
+        sPath = parcel.readParcelable(SerializablePath.class.getClassLoader());
+        dx = (Float) parcel.readValue(Float.class.getClassLoader());
+        dy = (Float) parcel.readValue(Float.class.getClassLoader());
     }
 
     @Override
@@ -65,5 +77,12 @@ public class AddPathOp extends AbstractPathOp {
         else {
             path.addPath(sPath.makePath());
         }
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(sPath, 0);
+        parcel.writeValue(dx);
+        parcel.writeValue(dy);
     }
 }

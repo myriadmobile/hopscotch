@@ -25,6 +25,7 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#quadTo(float, float, float, float)
@@ -38,6 +39,7 @@ public class QuadToOp extends AbstractPathOp {
     private final Boolean r;
 
     public QuadToOp(float x1, float y1, float x2, float y2) {
+        super(null);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -46,11 +48,22 @@ public class QuadToOp extends AbstractPathOp {
     }
 
     public QuadToOp(float x1, float y1, float x2, float y2, boolean r) {
+        super(null);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.r = r;
+    }
+
+    protected QuadToOp(Parcel parcel) {
+        super(parcel);
+
+        x1 = parcel.readFloat();
+        y1 = parcel.readFloat();
+        x2 = parcel.readFloat();
+        y2 = parcel.readFloat();
+        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
@@ -61,5 +74,14 @@ public class QuadToOp extends AbstractPathOp {
         else {
             path.rQuadTo(x1, y1, x2, y2);
         }
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeFloat(x1);
+        parcel.writeFloat(y1);
+        parcel.writeFloat(x2);
+        parcel.writeFloat(y2);
+        parcel.writeValue(r);
     }
 }

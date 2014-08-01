@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Parcel;
 
 /**
  * @see Path#addArc(android.graphics.RectF, float, float)
@@ -36,13 +37,28 @@ public class AddArcOp extends AbstractPathOp {
     private final float sweepAngle;
 
     public AddArcOp(RectF oval, float startAngle, float sweepAngle) {
+        super(null);
         this.oval = oval;
         this.startAngle = startAngle;
         this.sweepAngle = sweepAngle;
     }
 
+    protected AddArcOp(Parcel parcel) {
+        super(parcel);
+        this.oval = parcel.readParcelable(RectF.class.getClassLoader());
+        this.startAngle = parcel.readFloat();
+        this.sweepAngle = parcel.readFloat();
+    }
+
     @Override
     void applyToPath(Path path) {
         path.addArc(oval, startAngle, sweepAngle);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(oval, 0);
+        parcel.writeFloat(startAngle);
+        parcel.writeFloat(sweepAngle);
     }
 }

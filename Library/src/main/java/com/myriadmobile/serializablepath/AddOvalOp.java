@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Parcel;
 
 /**
  * @see Path#addOval(android.graphics.RectF, android.graphics.Path.Direction)
@@ -36,12 +37,26 @@ public class AddOvalOp extends AbstractPathOp {
     private final Path.Direction dir;
 
     public AddOvalOp(RectF oval, Path.Direction dir) {
+        super(null);
         this.oval = oval;
         this.dir = dir;
+    }
+
+    protected AddOvalOp(Parcel parcel) {
+        super(parcel);
+
+        oval = parcel.readParcelable(RectF.class.getClassLoader());
+        dir = Path.Direction.values()[parcel.readInt()];
     }
 
     @Override
     void applyToPath(Path path) {
         path.addOval(oval, dir);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(oval, 0);
+        parcel.writeInt(dir.ordinal());
     }
 }

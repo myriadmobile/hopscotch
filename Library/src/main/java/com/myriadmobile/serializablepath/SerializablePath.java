@@ -27,6 +27,8 @@ package com.myriadmobile.serializablepath;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import java.util.ArrayList;
  *
  * @see android.graphics.Path
  */
-public class SerializablePath implements Serializable, Comparable<SerializablePath> {
+public class SerializablePath implements Serializable, Comparable<SerializablePath>, Parcelable {
 
     private Path.FillType mFillType;
     private ArrayList<AbstractPathOp> mOperations;
@@ -58,6 +60,12 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     public SerializablePath() {
         mFillType = Path.FillType.WINDING;
         mOperations = new ArrayList<AbstractPathOp>();
+    }
+
+    public SerializablePath(Parcel parcel) {
+        this.mFillType = Path.FillType.values()[parcel.readInt()];
+        mOperations = new ArrayList<AbstractPathOp>();
+        parcel.readTypedList(mOperations, AbstractPathOp.CREATOR);
     }
 
     /**
@@ -614,4 +622,14 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mFillType.ordinal());
+        parcel.writeTypedList(mOperations);
+    }
 }

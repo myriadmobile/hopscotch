@@ -25,6 +25,7 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#moveTo(float, float)
@@ -36,15 +37,25 @@ public class MoveToOp extends AbstractPathOp {
     private final Boolean r;
 
     public MoveToOp(float x, float y) {
+        super(null);
         this.x = x;
         this.y = y;
         this.r = null;
     }
 
     public MoveToOp(float dx, float dy, boolean r) {
+        super(null);
         this.x = dx;
         this.y = dy;
         this.r = r;
+    }
+
+    protected MoveToOp(Parcel parcel) {
+        super(parcel);
+
+        x = parcel.readFloat();
+        y = parcel.readFloat();
+        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
@@ -55,5 +66,12 @@ public class MoveToOp extends AbstractPathOp {
         else {
             path.rMoveTo(x, y);
         }
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeFloat(x);
+        parcel.writeFloat(y);
+        parcel.writeValue(r);
     }
 }

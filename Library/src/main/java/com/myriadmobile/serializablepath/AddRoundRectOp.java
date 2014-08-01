@@ -26,6 +26,7 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
@@ -33,17 +34,33 @@ import android.graphics.RectF;
 public class AddRoundRectOp extends AbstractPathOp {
 
     private final RectF rect;
-    private final float[] radii;
+    private float[] radii;
     private final Path.Direction dir;
 
     public AddRoundRectOp(RectF rect, float[] radii, Path.Direction dir) {
+        super(null);
         this.rect = rect;
         this.radii = radii;
         this.dir = dir;
     }
 
+    protected AddRoundRectOp(Parcel parcel) {
+        super(parcel);
+
+        rect = parcel.readParcelable(RectF.class.getClassLoader());
+        dir = Path.Direction.values()[parcel.readInt()];
+        parcel.readFloatArray(radii);
+    }
+
     @Override
     void applyToPath(Path path) {
         path.addRoundRect(rect, radii, dir);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(rect, 0);
+        parcel.writeInt(dir.ordinal());
+        parcel.writeFloatArray(radii);
     }
 }

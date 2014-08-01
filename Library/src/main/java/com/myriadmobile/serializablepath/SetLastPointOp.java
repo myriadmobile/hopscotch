@@ -25,6 +25,7 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#setLastPoint(float, float)
@@ -35,12 +36,26 @@ public class SetLastPointOp extends AbstractPathOp {
     private final float dy;
 
     public SetLastPointOp(float dx, float dy) {
+        super(null);
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public SetLastPointOp(Parcel parcel) {
+        super(parcel);
+
+        dx = parcel.readFloat();
+        dy = parcel.readFloat();
     }
 
     @Override
     void applyToPath(Path path) {
         path.setLastPoint(dx, dy);
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeFloat(dx);
+        parcel.writeFloat(dy);
     }
 }

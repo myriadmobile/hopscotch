@@ -25,14 +25,28 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Path;
+import android.os.Parcel;
 
 /**
  * @see android.graphics.Path#close()
  */
 class CloseOp extends AbstractPathOp {
 
+    protected CloseOp(Parcel parcel) {
+        super(parcel);
+    }
+
+    public CloseOp() {
+        super(null);
+    }
+
     @Override
     void applyToPath(Path path) {
         path.close();
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+
     }
 }
