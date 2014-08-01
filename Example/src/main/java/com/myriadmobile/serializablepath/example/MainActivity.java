@@ -2,6 +2,8 @@ package com.myriadmobile.serializablepath.example;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -34,6 +36,14 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        SimplePathView image = (SimplePathView) findViewById(R.id.image_path);
+        image.setPath(path.makePath());
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(15);
+        paint.setColor(Color.RED);
+        image.setPaint(paint);
     }
 
 

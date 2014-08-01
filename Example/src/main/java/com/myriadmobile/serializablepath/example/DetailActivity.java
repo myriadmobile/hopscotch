@@ -25,7 +25,8 @@
 package com.myriadmobile.serializablepath.example;
 
 import android.app.Activity;
-import android.graphics.Path;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import com.myriadmobile.serializablepath.SerializablePath;
@@ -41,11 +42,26 @@ public class DetailActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
 
         SerializablePath path = getIntent().getParcelableExtra(EXTRA_PATH_PARCELABLE);
-        Path realPath = path.makePath();
+
+        SimplePathView image1 = (SimplePathView) findViewById(R.id.image_path1);
+        image1.setPath(path.makePath());
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(15);
+        paint.setColor(Color.RED);
+        image1.setPaint(paint);
 
         SerializablePath path2 = (SerializablePath) getIntent().getSerializableExtra(EXTRA_PATH_SERIALIZABLE);
-        Path realPath2 = path2.makePath();
+
+        SimplePathView image2 = (SimplePathView) findViewById(R.id.image_path2);
+        image2.setPath(path2.makePath());
+        Paint paint2 = new Paint();
+        paint2.setStyle(Paint.Style.STROKE);
+        paint2.setStrokeWidth(15);
+        paint2.setColor(Color.BLUE);
+        image2.setPaint(paint2);
     }
 }
