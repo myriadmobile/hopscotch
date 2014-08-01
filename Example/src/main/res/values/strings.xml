@@ -3,6 +3,6 @@
 
     <string name="app_name">Serializable Path</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_view_github">View on Github</string>
 
 </resources>
