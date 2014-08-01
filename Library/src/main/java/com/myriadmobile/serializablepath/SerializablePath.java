@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 /**
  * A mostly drop in replacement for {@link android.graphics.Path} that implements
- * {@link java.io.Serializable} and {@link java.lang.Comparable}
+ * {@link java.io.Serializable}, {@link android.os.Parcelable} and {@link java.lang.Comparable}
  *
  * @see android.graphics.Path
  */

@@ -1,6 +1,6 @@
 Serializable Path
 =================
 
-A (mostly) drop in replacement for Android's Path which implements Serializable.
+A drop in replacement for Android's Path which implements Serializable and Parcelable.
 
 Currently under development
