@@ -30,7 +30,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#moveTo(float, float)
  */
-public class MoveToOp extends AbstractPathOp {
+class MoveToOp extends AbstractPathOp {
 
     private final float x;
     private final float y;
@@ -56,6 +56,11 @@ public class MoveToOp extends AbstractPathOp {
         x = parcel.readFloat();
         y = parcel.readFloat();
         r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.MOVE_TO_OP;
     }
 
     @Override

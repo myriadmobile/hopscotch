@@ -31,7 +31,7 @@ import android.os.Parcel;
 /**
  * @see Path#transform(android.graphics.Matrix)
  */
-public class TransformOp extends AbstractPathOp {
+class TransformOp extends AbstractPathOp {
 
     private float[] values;
 
@@ -44,6 +44,11 @@ public class TransformOp extends AbstractPathOp {
     public TransformOp(Parcel parcel) {
         super(parcel);
         parcel.readFloatArray(values);
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.TRANSFORM_OP;
     }
 
     @Override

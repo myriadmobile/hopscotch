@@ -30,7 +30,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#cubicTo(float, float, float, float, float, float)
  */
-public class CubicToOp extends AbstractPathOp {
+class CubicToOp extends AbstractPathOp {
 
     private final float x1;
     private final float y1;
@@ -72,6 +72,11 @@ public class CubicToOp extends AbstractPathOp {
         x3 = parcel.readFloat();
         y3 = parcel.readFloat();
         r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.CUBIC_TO_OP;
     }
 
     @Override

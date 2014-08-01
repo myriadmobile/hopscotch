@@ -36,6 +36,11 @@ class CloseOp extends AbstractPathOp {
         super(parcel);
     }
 
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.CLOSE_OP;
+    }
+
     public CloseOp() {
         super(null);
     }

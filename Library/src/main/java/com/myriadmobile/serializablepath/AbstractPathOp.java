@@ -27,26 +27,37 @@ package com.myriadmobile.serializablepath;
 import android.graphics.Path;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 /**
  * Abstract class to holds information about different ops made onto
  * a {@link com.myriadmobile.serializablepath.SerializablePath} so it can be
  * serialized out and recreated later
  */
-public abstract class AbstractPathOp implements Parcelable {
+abstract class AbstractPathOp implements Parcelable {
+
+    static final int ADD_ARC_OP = 2;
+    static final int ADD_CIRCLE_OP = 3;
+    static final int ADD_OVAL_OP = 4;
+    static final int ADD_PATH_OP = 5;
+    static final int ADD_RECT_OP = 6;
+    static final int ADD_ROUND_RECT_OP = 7;
+    static final int ADD_ROUND_RECT_XY_OP = 8;
+    static final int ARC_TO_OP = 9;
+    static final int CLOSE_OP = 10;
+    static final int CUBIC_TO_OP = 11;
+    static final int LINE_TO_OP = 12;
+    static final int MOVE_TO_OP = 13;
+    static final int OFFSET_OP = 14;
+    static final int QUAD_TO_OP = 15;
+    static final int SET_LAST_POINT_OP = 16;
+    static final int TRANSFORM_OP = 17;
 
     public static final Creator<AbstractPathOp> CREATOR = new Creator<AbstractPathOp>() {
 
         @Override
         public AbstractPathOp createFromParcel(Parcel parcel) {
-            try {
-                String name = parcel.readString();
-                Log.w("PathOp", "Class Name: " + name);
-                return (AbstractPathOp) Class.forName(name).getConstructor(Parcel.class).newInstance(parcel);
-            } catch (Exception e) {
-                throw new RuntimeException("This shouldn't be a thing", e);
-            }
+            int opId = parcel.readInt();
+            return makeInstance(opId, parcel);
         }
 
         @Override
@@ -55,15 +66,17 @@ public abstract class AbstractPathOp implements Parcelable {
         }
     };
 
-    public AbstractPathOp(Parcel parcel) {
+    protected AbstractPathOp(Parcel parcel) {
         //Here so subclasses are required to implement this constructor
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(getClass().getCanonicalName());
+        parcel.writeInt(getOpId());
         writeToParcel(parcel);
     }
+
+    protected abstract int getOpId();
 
     @Override
     public int describeContents() {
@@ -71,5 +84,28 @@ public abstract class AbstractPathOp implements Parcelable {
     }
 
     abstract void applyToPath(Path path);
+
     abstract void writeToParcel(Parcel parcel);
+
+    private static AbstractPathOp makeInstance(int id, Parcel parcel) {
+        switch (id) {
+            case ADD_ARC_OP: return new AddArcOp(parcel);
+            case ADD_CIRCLE_OP: return new AddCircleOp(parcel);
+            case ADD_OVAL_OP: return new AddOvalOp(parcel);
+            case ADD_PATH_OP: return new AddPathOp(parcel);
+            case ADD_RECT_OP: return new AddRectOp(parcel);
+            case ADD_ROUND_RECT_OP: return new AddRoundRectOp(parcel);
+            case ADD_ROUND_RECT_XY_OP: return new AddRoundRectOp(parcel);
+            case ARC_TO_OP: return new ArcToOp(parcel);
+            case CLOSE_OP: return new CloseOp(parcel);
+            case CUBIC_TO_OP: return new CubicToOp(parcel);
+            case LINE_TO_OP: return new LineToOp(parcel);
+            case MOVE_TO_OP: return new MoveToOp(parcel);
+            case OFFSET_OP: return new OffsetOp(parcel);
+            case QUAD_TO_OP: return new QuadToOp(parcel);
+            case SET_LAST_POINT_OP: return new SetLastPointOp(parcel);
+            case TRANSFORM_OP: return new TransformOp(parcel);
+        }
+        return null;
+    }
 }

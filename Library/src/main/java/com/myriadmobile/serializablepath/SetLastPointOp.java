@@ -30,7 +30,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#setLastPoint(float, float)
  */
-public class SetLastPointOp extends AbstractPathOp {
+class SetLastPointOp extends AbstractPathOp {
 
     private final float dx;
     private final float dy;
@@ -46,6 +46,11 @@ public class SetLastPointOp extends AbstractPathOp {
 
         dx = parcel.readFloat();
         dy = parcel.readFloat();
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.SET_LAST_POINT_OP;
     }
 
     @Override

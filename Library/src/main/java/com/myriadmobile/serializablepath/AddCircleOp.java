@@ -30,7 +30,7 @@ import android.os.Parcel;
 /**
  * @see Path#addCircle(float, float, float, android.graphics.Path.Direction)
  */
-public class AddCircleOp extends AbstractPathOp {
+class AddCircleOp extends AbstractPathOp {
 
     private final float x;
     private final float y;
@@ -51,6 +51,11 @@ public class AddCircleOp extends AbstractPathOp {
         y = parcel.readFloat();
         radius = parcel.readFloat();
         dir = Path.Direction.values()[parcel.readInt()];
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.ADD_CIRCLE_OP;
     }
 
     @Override

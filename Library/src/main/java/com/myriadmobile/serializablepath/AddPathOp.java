@@ -33,7 +33,7 @@ import android.os.Parcel;
  *
  * @see android.graphics.Path#addPath(android.graphics.Path)
  */
-public class AddPathOp extends AbstractPathOp {
+class AddPathOp extends AbstractPathOp {
 
     private final SerializablePath sPath;
     private final Float dx;
@@ -67,6 +67,11 @@ public class AddPathOp extends AbstractPathOp {
         sPath = parcel.readParcelable(SerializablePath.class.getClassLoader());
         dx = (Float) parcel.readValue(Float.class.getClassLoader());
         dy = (Float) parcel.readValue(Float.class.getClassLoader());
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.ADD_PATH_OP;
     }
 
     @Override

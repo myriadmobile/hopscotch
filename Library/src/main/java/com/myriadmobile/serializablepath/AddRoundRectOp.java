@@ -31,7 +31,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
  */
-public class AddRoundRectOp extends AbstractPathOp {
+class AddRoundRectOp extends AbstractPathOp {
 
     private final RectF rect;
     private float[] radii;
@@ -50,6 +50,11 @@ public class AddRoundRectOp extends AbstractPathOp {
         rect = parcel.readParcelable(RectF.class.getClassLoader());
         dir = Path.Direction.values()[parcel.readInt()];
         parcel.readFloatArray(radii);
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.ADD_ROUND_RECT_OP;
     }
 
     @Override

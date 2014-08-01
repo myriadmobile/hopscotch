@@ -30,7 +30,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#quadTo(float, float, float, float)
  */
-public class QuadToOp extends AbstractPathOp {
+class QuadToOp extends AbstractPathOp {
 
     private final float x1;
     private final float y1;
@@ -64,6 +64,11 @@ public class QuadToOp extends AbstractPathOp {
         x2 = parcel.readFloat();
         y2 = parcel.readFloat();
         r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.QUAD_TO_OP;
     }
 
     @Override

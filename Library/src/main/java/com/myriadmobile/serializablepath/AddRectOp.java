@@ -31,7 +31,7 @@ import android.os.Parcel;
 /**
  * @see android.graphics.Path#addRect(android.graphics.RectF, android.graphics.Path.Direction)
  */
-public class AddRectOp extends AbstractPathOp {
+class AddRectOp extends AbstractPathOp {
 
     private final RectF rect;
     private final Path.Direction dir;
@@ -53,6 +53,11 @@ public class AddRectOp extends AbstractPathOp {
 
         rect = parcel.readParcelable(RectF.class.getClassLoader());
         dir = Path.Direction.values()[parcel.readInt()];
+    }
+
+    @Override
+    protected int getOpId() {
+        return AbstractPathOp.ADD_RECT_OP;
     }
 
     @Override
