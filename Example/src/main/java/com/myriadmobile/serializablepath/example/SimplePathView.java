@@ -28,6 +28,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -53,8 +54,13 @@ public class SimplePathView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        RectF bounds = new RectF();
         if(mPath != null && mPaint != null) {
+            canvas.save();
+            mPath.computeBounds(bounds, false);
+            canvas.translate((getWidth()/2)-(bounds.width()/2), (getHeight()/2)-(bounds.height()/2));
             canvas.drawPath(mPath, mPaint);
+            canvas.restore();
         }
     }
 

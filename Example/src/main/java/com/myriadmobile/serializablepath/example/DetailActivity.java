@@ -26,13 +26,14 @@ package com.myriadmobile.serializablepath.example;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 
 import com.myriadmobile.serializablepath.SerializablePath;
 
 /**
- *
+ * Receiver for sent {@link com.myriadmobile.serializablepath.SerializablePath}s
  */
 public class DetailActivity extends Activity {
 
@@ -45,23 +46,28 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         SerializablePath path = getIntent().getParcelableExtra(EXTRA_PATH_PARCELABLE);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(45f, 100, 100);
+        path.transform(matrix);
 
         SimplePathView image1 = (SimplePathView) findViewById(R.id.image_path1);
         image1.setPath(path.makePath());
         Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(15);
-        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.parseColor("#4fbfb4"));
         image1.setPaint(paint);
 
         SerializablePath path2 = (SerializablePath) getIntent().getSerializableExtra(EXTRA_PATH_SERIALIZABLE);
+        matrix = new Matrix();
+        matrix.postScale(1.25f, 1.25f);
+        matrix.postSkew(0.2f, 0);
+        path2.transform(matrix);
 
         SimplePathView image2 = (SimplePathView) findViewById(R.id.image_path2);
         image2.setPath(path2.makePath());
         Paint paint2 = new Paint();
-        paint2.setStyle(Paint.Style.STROKE);
-        paint2.setStrokeWidth(15);
-        paint2.setColor(Color.BLUE);
+        paint2.setStyle(Paint.Style.FILL);
+        paint2.setColor(Color.parseColor("#198a92"));
         image2.setPaint(paint2);
     }
 }

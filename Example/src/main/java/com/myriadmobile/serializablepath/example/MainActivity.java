@@ -16,7 +16,10 @@ import com.myriadmobile.serializablepath.SerializablePath;
 
 import java.io.Serializable;
 
-
+/**
+ * Launched Activity. This will send a {@link com.myriadmobile.serializablepath.SerializablePath}
+ * to the {@link com.myriadmobile.serializablepath.example.DetailActivity}
+ */
 public class MainActivity extends Activity {
 
     @Override
@@ -24,7 +27,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final SerializablePath path = getPath();
+        final SerializablePath path;
+        try {
+            path = SvgDataParser.getPath(this);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         Button button = (Button) findViewById(R.id.button_test_serialization);
         button.setOnClickListener(new View.OnClickListener() {
@@ -40,9 +48,8 @@ public class MainActivity extends Activity {
         SimplePathView image = (SimplePathView) findViewById(R.id.image_path);
         image.setPath(path.makePath());
         Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(15);
-        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.BLACK);
         image.setPaint(paint);
     }
 
@@ -64,16 +71,5 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private static SerializablePath getPath() {
-
-        SerializablePath path = new SerializablePath();
-        path.rMoveTo(10, 10);
-        path.lineTo(90, 10);
-        path.quadTo(90, 90, 10, 90);
-        path.close();
-
-        return path;
     }
 }
