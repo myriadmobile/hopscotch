@@ -632,4 +632,17 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         parcel.writeInt(mFillType.ordinal());
         parcel.writeTypedList(mOperations);
     }
+
+    public static final Creator<SerializablePath> CREATOR = new Creator<SerializablePath>() {
+
+        @Override
+        public SerializablePath createFromParcel(Parcel parcel) {
+            return new SerializablePath(parcel);
+        }
+
+        @Override
+        public SerializablePath[] newArray(int i) {
+            return new SerializablePath[i];
+        }
+    };
 }
