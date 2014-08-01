@@ -227,10 +227,35 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         mOperations.add(new ArcToOp(oval, startAngle, sweepAngle, forceMoveTo));
     }
 
-    /* TODO Unimplemented methods
-    * computeBounds()
-    * isRect(RectF)
-    */
+    /**
+     * Returns true if the path specifies a rectangle. If so, and if rect is
+     * not null, set rect to the bounds of the path. If the path does not
+     * specify a rectangle, return false and ignore rect.
+     *
+     * <b>NOTE:</b> this implementation calls {@link #makePath()} and then calls
+     * {@link android.graphics.Path#isRect(android.graphics.RectF)}
+     *
+     * @param rect If not null, returns the bounds of the path if it specifies
+     *             a rectangle
+     * @return     true if the path specifies a rectangle
+     */
+    public boolean isRect(RectF rect) {
+        return makePath().isRect(rect);
+    }
+    /**
+     * Compute the bounds of the control points of the path, and write the
+     * answer into bounds. If the path contains 0 or 1 points, the bounds is
+     * set to (0,0,0,0)
+     *
+     * <b>NOTE:</b> this implementation calls {@link #makePath()} and then calls
+     * {@link android.graphics.Path#computeBounds(android.graphics.RectF, boolean)}
+     *
+     * @param bounds Returns the computed bounds of the path's control points.
+     * @param exact This parameter is no longer used.
+     */
+    public void computeBounds(RectF bounds, boolean exact) {
+        makePath().computeBounds(bounds, exact);
+    }
 
     /**
      * Close the current contour. If the current point is not equal to the
@@ -471,8 +496,8 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @see Path#set(android.graphics.Path)
      */
     public void set(SerializablePath path) {
-        //TODO needs impl
-        throw new UnsupportedOperationException("Needs implementation");
+        path.reset();
+        path.mOperations.addAll(mOperations);
     }
 
     /**
@@ -561,16 +586,22 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         if(o == this) {
             return true;
         }
-        if(o instanceof SerializablePath) {
-            SerializablePath other = (SerializablePath) o;
-            if(this.mOperations.size() == other.mOperations.size()) {
-                return this.mOperations.equals(other.mOperations);
-            }
-            else {
-                return false;
-            }
+        if(!(o instanceof SerializablePath)) {
+            return false;
         }
-        return false;
+
+        SerializablePath other = (SerializablePath) o;
+
+        if(mFillType != other.mFillType) {
+            return false;
+        }
+
+        if(this.mOperations.size() == other.mOperations.size()) {
+            return this.mOperations.equals(other.mOperations);
+        }
+        else {
+            return false;
+        }
     }
 
     /**
