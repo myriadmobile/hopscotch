@@ -32,7 +32,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * A {@link java.io.Serializable} and {@link java.lang.Comparable} implementation of {@link android.graphics.Path}
+ * A mostly drop in replacement for {@link android.graphics.Path} that implements
+ * {@link java.io.Serializable} and {@link java.lang.Comparable}
+ *
+ * @see android.graphics.Path
  */
 public class SerializablePath implements Serializable, Comparable<SerializablePath> {
 
