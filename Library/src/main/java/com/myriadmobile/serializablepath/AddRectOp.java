@@ -48,7 +48,7 @@ public class AddRectOp extends AbstractPathOp {
         this.dir = dir;
     }
 
-    protected AddRectOp(Parcel parcel) {
+    public AddRectOp(Parcel parcel) {
         super(parcel);
 
         rect = parcel.readParcelable(RectF.class.getClassLoader());

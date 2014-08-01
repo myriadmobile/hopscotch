@@ -54,7 +54,7 @@ public class ArcToOp extends AbstractPathOp {
         this.force = null;
     }
 
-    protected ArcToOp(Parcel parcel) {
+    public ArcToOp(Parcel parcel) {
         super(parcel);
 
         oval = parcel.readParcelable(RectF.class.getClassLoader());

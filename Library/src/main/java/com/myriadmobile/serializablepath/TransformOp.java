@@ -41,7 +41,7 @@ public class TransformOp extends AbstractPathOp {
         matrix.getValues(values);
     }
 
-    protected TransformOp(Parcel parcel) {
+    public TransformOp(Parcel parcel) {
         super(parcel);
         parcel.readFloatArray(values);
     }

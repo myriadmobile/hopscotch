@@ -50,7 +50,7 @@ public class LineToOp extends AbstractPathOp {
         this.r = true;
     }
 
-    protected LineToOp(Parcel parcel) {
+    public LineToOp(Parcel parcel) {
         super(parcel);
 
         x = parcel.readFloat();

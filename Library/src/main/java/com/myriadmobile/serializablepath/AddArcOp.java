@@ -43,7 +43,7 @@ public class AddArcOp extends AbstractPathOp {
         this.sweepAngle = sweepAngle;
     }
 
-    protected AddArcOp(Parcel parcel) {
+    public AddArcOp(Parcel parcel) {
         super(parcel);
         this.oval = parcel.readParcelable(RectF.class.getClassLoader());
         this.startAngle = parcel.readFloat();

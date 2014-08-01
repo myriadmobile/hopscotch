@@ -44,7 +44,7 @@ public class AddRoundRectOp extends AbstractPathOp {
         this.dir = dir;
     }
 
-    protected AddRoundRectOp(Parcel parcel) {
+    public AddRoundRectOp(Parcel parcel) {
         super(parcel);
 
         rect = parcel.readParcelable(RectF.class.getClassLoader());

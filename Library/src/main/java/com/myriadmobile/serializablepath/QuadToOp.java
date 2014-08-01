@@ -56,7 +56,7 @@ public class QuadToOp extends AbstractPathOp {
         this.r = r;
     }
 
-    protected QuadToOp(Parcel parcel) {
+    public QuadToOp(Parcel parcel) {
         super(parcel);
 
         x1 = parcel.readFloat();

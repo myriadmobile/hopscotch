@@ -32,7 +32,7 @@ import android.os.Parcel;
  */
 class CloseOp extends AbstractPathOp {
 
-    protected CloseOp(Parcel parcel) {
+    public CloseOp(Parcel parcel) {
         super(parcel);
     }
 

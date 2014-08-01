@@ -45,7 +45,7 @@ public class AddCircleOp extends AbstractPathOp {
         this.dir = dir;
     }
 
-    protected AddCircleOp(Parcel parcel) {
+    public AddCircleOp(Parcel parcel) {
         super(parcel);
         x = parcel.readFloat();
         y = parcel.readFloat();

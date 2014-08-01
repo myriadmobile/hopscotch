@@ -50,7 +50,7 @@ public class MoveToOp extends AbstractPathOp {
         this.r = r;
     }
 
-    protected MoveToOp(Parcel parcel) {
+    public MoveToOp(Parcel parcel) {
         super(parcel);
 
         x = parcel.readFloat();

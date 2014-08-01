@@ -42,7 +42,7 @@ public class AddOvalOp extends AbstractPathOp {
         this.dir = dir;
     }
 
-    protected AddOvalOp(Parcel parcel) {
+    public AddOvalOp(Parcel parcel) {
         super(parcel);
 
         oval = parcel.readParcelable(RectF.class.getClassLoader());
