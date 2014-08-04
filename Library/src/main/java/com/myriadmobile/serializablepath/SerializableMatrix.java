@@ -25,38 +25,59 @@
 package com.myriadmobile.serializablepath;
 
 import android.graphics.Matrix;
-import android.graphics.Path;
 import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
- * @see Path#transform(android.graphics.Matrix)
+ * {@link java.io.Serializable} and {@link android.os.Parcelable } version
+ * of {@link android.graphics.Matrix}
  */
-class TransformOp extends AbstractPathOp {
+public class SerializableMatrix implements Serializable, Parcelable {
 
-    private SerializableMatrix matrix;
+    private float[] values;
 
-    public TransformOp(Matrix matrix) {
-        super(null);
-        this.matrix = new SerializableMatrix(matrix);
+    public SerializableMatrix(Matrix matrix) {
+        setMatrix(matrix);
     }
 
-    public TransformOp(Parcel parcel) {
-        super(parcel);
-        matrix = parcel.readParcelable(SerializableMatrix.class.getClassLoader());
+    public SerializableMatrix(Parcel parcel) {
+        values = new float[9];
+        parcel.readFloatArray(values);
+    }
+
+    public void setMatrix(Matrix matrix) {
+        values = new float[9];
+        matrix.getValues(values);
+    }
+
+    public Matrix getMatrix() {
+        Matrix matrix = new Matrix();
+        matrix.setValues(values);
+        return matrix;
     }
 
     @Override
-    protected int getOpId() {
-        return AbstractPathOp.TRANSFORM_OP;
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    void applyToPath(Path path) {
-        path.transform(matrix.getMatrix());
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeFloatArray(values);
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel) {
-        parcel.writeParcelable(matrix, 0);
-    }
+    public static final Creator<SerializableMatrix> CREATOR = new Creator<SerializableMatrix>() {
+
+        @Override
+        public SerializableMatrix createFromParcel(Parcel parcel) {
+            return new SerializableMatrix(parcel);
+        }
+
+        @Override
+        public SerializableMatrix[] newArray(int i) {
+            return new SerializableMatrix[i];
+        }
+    };
 }

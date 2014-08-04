@@ -3,6 +3,7 @@ package com.myriadmobile.serializablepath.example;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +34,9 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        Matrix matrix = new Matrix();
+        matrix.postScale(0.8f, 0.8f);
+        path.transform(matrix);
 
         Button button = (Button) findViewById(R.id.button_test_serialization);
         button.setOnClickListener(new View.OnClickListener() {
