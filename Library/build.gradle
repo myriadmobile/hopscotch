@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 19
@@ -9,6 +10,30 @@ android {
         minSdkVersion 9
         targetSdkVersion 19
         versionCode 1
-        versionName "0.1.0"
+        versionName "0.9.1"
     }
+}
+
+//
+// Below code was adapted from
+// https://github.com/DeployGate/deploygate-android-sdk
+//
+android.libraryVariants.all { variant ->
+    def name = variant.buildType.name
+    if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
+        return; // Skip debug builds.
+    }
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task)
+}
+
+task androidJar(type: Jar) {
+    from android.sourceSets.main.java
+}
+
+// central upload
+if(gradle.startParameter.taskNames.contains('uploadArchives')) {
+    apply from: 'build.publish.gradle'
 }
