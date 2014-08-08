@@ -20,5 +20,6 @@ android {
 }
 
 dependencies {
-    compile project(':Library')
+    //compile project(':Library')
+    compile 'com.myriadmobile:serializablepath:0.9.1'
 }
