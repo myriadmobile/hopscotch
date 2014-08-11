@@ -26,12 +26,14 @@ package com.myriadmobile.serializablepath;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A mostly drop in replacement for {@link android.graphics.Path} that implements
@@ -83,7 +85,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param sweepAngle Sweep angle (in degrees) measured clockwise
      */
     public void addArc(RectF oval, float startAngle, float sweepAngle) {
-        mOperations.add(new AddArcOp(oval, startAngle, sweepAngle));
+        addOp(new AddArcOp(oval, startAngle, sweepAngle));
     }
 
     /**
@@ -97,7 +99,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir    The direction to wind the circle's contour
      */
     public void addCircle(float x, float y, float radius, Path.Direction dir) {
-        mOperations.add(new AddCircleOp(x, y, radius, dir));
+        addOp(new AddCircleOp(x, y, radius, dir));
     }
 
     /**
@@ -109,7 +111,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the oval's contour
      */
     public void addOval(RectF oval, Path.Direction dir) {
-        mOperations.add(new AddOvalOp(oval, dir));
+        addOp(new AddOvalOp(oval, dir));
     }
 
     /**
@@ -122,7 +124,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dy  The amount to translate the path in Y as it is added
      */
     public void addPath(SerializablePath src, float dx, float dy) {
-        mOperations.add(new AddPathOp(src, dx, dy));
+        addOp(new AddPathOp(src, dx, dy));
     }
 
     /**
@@ -133,7 +135,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param path The path that is appended to the current path
      */
     public void addPath(SerializablePath path) {
-        mOperations.add(new AddPathOp(path));
+        addOp(new AddPathOp(path));
     }
 
     /**
@@ -145,7 +147,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param matrix matrix to use for transform
      */
     public void addPath(SerializablePath path, Matrix matrix) {
-        mOperations.add(new AddPathOp(path, matrix));
+        addOp(new AddPathOp(path, matrix));
     }
 
     /**
@@ -157,7 +159,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param matrix matrix to use for transform
      */
     public void addPath(SerializablePath path, SerializableMatrix matrix) {
-        mOperations.add(new AddPathOp(path, matrix));
+        addOp(new AddPathOp(path, matrix));
     }
 
     /**
@@ -172,7 +174,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir    The direction to wind the rectangle's contour
      */
     public void addRect(float left, float top, float right, float bottom, Path.Direction dir) {
-        mOperations.add(new AddRectOp(left, top, right, bottom, dir));
+        addOp(new AddRectOp(left, top, right, bottom, dir));
     }
 
     /**
@@ -184,7 +186,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the rectangle's contour
      */
     public void addRect(RectF rect, Path.Direction dir) {
-        mOperations.add(new AddRectOp(rect, dir));
+        addOp(new AddRectOp(rect, dir));
     }
 
     /**
@@ -199,7 +201,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the round-rectangle's contour
      */
     public void addRoundRect(RectF rect, float[] radii, Path.Direction dir) {
-        mOperations.add(new AddRoundRectOp(rect, radii, dir));
+        addOp(new AddRoundRectOp(rect, radii, dir));
     }
 
     /**
@@ -213,7 +215,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dir  The direction to wind the round-rectangle's contour
      */
     public void addRoundRect(RectF rect, float rx, float ry, Path.Direction dir) {
-        mOperations.add(new AddRoundRectXYOp(rect, rx, ry, dir));
+        addOp(new AddRoundRectXYOp(rect, rx, ry, dir));
     }
 
 
@@ -231,7 +233,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param sweepAngle  Sweep angle (in degrees) measured clockwise
      */
     public void arcTo(RectF oval, float startAngle, float sweepAngle) {
-        mOperations.add(new ArcToOp(oval, startAngle, sweepAngle));
+        addOp(new ArcToOp(oval, startAngle, sweepAngle));
     }
 
     /**
@@ -250,7 +252,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param forceMoveTo If true, always begin a new contour with the arc
      */
     public void arcTo(RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo) {
-        mOperations.add(new ArcToOp(oval, startAngle, sweepAngle, forceMoveTo));
+        addOp(new ArcToOp(oval, startAngle, sweepAngle, forceMoveTo));
     }
 
     /**
@@ -266,7 +268,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @return     true if the path specifies a rectangle
      */
     public boolean isRect(RectF rect) {
-        return makePath().isRect(rect);
+        return getOrCreateCache().isRect(rect);
     }
 
     /**
@@ -281,7 +283,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param exact This parameter is no longer used.
      */
     public void computeBounds(RectF bounds, boolean exact) {
-        makePath().computeBounds(bounds, exact);
+        getOrCreateCache().computeBounds(bounds, exact);
     }
 
     /**
@@ -291,7 +293,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @see android.graphics.Path#close()
      */
     public void close() {
-        mOperations.add(new CloseOp());
+        addOp(new CloseOp());
     }
 
     /**
@@ -309,7 +311,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y3 The y-coordinate of the end point on a cubic curve
      */
     public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-        mOperations.add(new CubicToOp(x1, y1, x2, y2, x3, y3));
+        addOp(new CubicToOp(x1, y1, x2, y2, x3, y3));
     }
 
     /**
@@ -372,7 +374,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y The y-coordinate of the end of a line
      */
     public void lineTo(float x, float y) {
-        mOperations.add(new LineToOp(x, y));
+        addOp(new LineToOp(x, y));
     }
 
     /**
@@ -384,7 +386,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y The y-coordinate of the start of a new contour
      */
     public void moveTo(float x, float y) {
-        mOperations.add(new MoveToOp(x, y));
+        addOp(new MoveToOp(x, y));
     }
 
     /**
@@ -415,7 +417,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dy The amount in the Y direction to offset the entire path
      */
     public void offset(float dx, float dy) {
-        mOperations.add(new OffsetOp(dx, dy));
+        addOp(new OffsetOp(dx, dy));
     }
 
     /**
@@ -431,7 +433,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y2 The y-coordinate of the end point on a quadratic curve
      */
     public void quadTo(float x1, float y1, float x2, float y2) {
-        mOperations.add(new QuadToOp(x1, y1, x2, y2));
+        addOp(new QuadToOp(x1, y1, x2, y2));
     }
 
     /**
@@ -447,7 +449,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param y3 The y-coordinate of the end point on a cubic curve
      */
     public void rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-        mOperations.add(new CubicToOp(x1, y1, x2, y2, x3, y3, true));
+        addOp(new CubicToOp(x1, y1, x2, y2, x3, y3, true));
     }
 
     /**
@@ -463,7 +465,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *           this contour, to specify a line
      */
     public void rLineTo(float dx, float dy) {
-        mOperations.add(new LineToOp(dx, dy, true));
+        addOp(new LineToOp(dx, dy, true));
     }
 
     /**
@@ -479,7 +481,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *           previous contour, to specify the start of a new contour
      */
     public void rMoveTo(float dx, float dy) {
-        mOperations.add(new MoveToOp(dx, dy, true));
+        addOp(new MoveToOp(dx, dy, true));
     }
 
     /**
@@ -499,7 +501,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *            this contour, for the end point of a quadratic curve
      */
     public void rQuadTo(float dx1, float dy1, float dx2, float dy2) {
-        mOperations.add(new QuadToOp(dx1, dy1, dx2, dy2, true));
+        addOp(new QuadToOp(dx1, dy1, dx2, dy2, true));
     }
 
     /**
@@ -532,8 +534,8 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param src Path to copy
      */
     public void set(SerializablePath src) {
-        src.reset();
-        mOperations.addAll(src.mOperations);
+        reset();
+        addAllOp(src.mOperations);
     }
 
     /**
@@ -556,7 +558,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param dy The new Y coordinate for the last point
      */
     public void setLastPoint(float dx, float dy) {
-        mOperations.add(new SetLastPointOp(dx, dy));
+        addOp(new SetLastPointOp(dx, dy));
     }
 
     /**
@@ -622,7 +624,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param matrix The matrix to apply to the path
      */
     public void transform(Matrix matrix) {
-        mOperations.add(new TransformOp(matrix));
+        addOp(new TransformOp(matrix));
     }
 
     /**
@@ -633,7 +635,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param matrix The matrix to apply to the path
      */
     public void transform(SerializableMatrix matrix) {
-        mOperations.add(new TransformOp(matrix));
+        addOp(new TransformOp(matrix));
     }
 
     /**
@@ -675,11 +677,44 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     /**
      * @param path Path to compare to
      *
-     * @return negative if this path has more ops, positive otherwise
+     * @return negative if this path is shorter, positive otherwise
      */
     @Override
     public int compareTo(SerializablePath path) {
-        return mOperations.size() - path.mOperations.size();
+
+        mPathMeasure.setPath(getOrCreateCache(), false);
+        float myDist = mPathMeasure.getLength();
+
+        mPathMeasure.setPath(path.getOrCreateCache(), false);
+        float otherDist = mPathMeasure.getLength();
+
+        return Float.compare(myDist, otherDist);
+    }
+
+    //
+    //
+    // Caching pregen paths
+    //
+    //
+
+    private transient Path mPathCache = null;
+    private static final PathMeasure mPathMeasure = new PathMeasure();
+
+    private void addOp(AbstractPathOp op) {
+        mPathCache = null;
+        mOperations.add(op);
+    }
+
+    private void addAllOp(Collection<? extends AbstractPathOp> ops) {
+        mPathCache = null;
+        mOperations.addAll(ops);
+    }
+
+    private Path getOrCreateCache() {
+        if(mPathCache == null) {
+            mPathCache = makePath();
+        }
+        return mPathCache;
     }
 
     //
