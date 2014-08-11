@@ -64,4 +64,28 @@ class AddOvalOp extends AbstractPathOp {
         parcel.writeParcelable(oval, 0);
         parcel.writeInt(dir.ordinal());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddOvalOp)) {
+            return false;
+        }
+
+        AddOvalOp other = (AddOvalOp) o;
+
+        return oval.equals(other.oval) &&
+                dir == other.dir;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + dir.hashCode();
+        result = 31 * result + oval.hashCode();
+        return result;
+    }
 }

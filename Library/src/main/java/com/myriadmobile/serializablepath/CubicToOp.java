@@ -99,4 +99,39 @@ class CubicToOp extends AbstractPathOp {
         parcel.writeFloat(y3);
         parcel.writeValue(r);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof CubicToOp)) {
+            return false;
+        }
+
+        CubicToOp other = (CubicToOp) o;
+
+        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
+        return rr &&
+                x1 == other.x1 &&
+                y1 == other.y1 &&
+                x2 == other.x2 &&
+                y2 == other.y2 &&
+                x3 == other.x3 &&
+                y3 == other.y3;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + (r != null && r ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(x1);
+        result = 31 * result + Float.floatToIntBits(y1);
+        result = 31 * result + Float.floatToIntBits(x2);
+        result = 31 * result + Float.floatToIntBits(y2);
+        result = 31 * result + Float.floatToIntBits(x3);
+        result = 31 * result + Float.floatToIntBits(y3);
+        return result;
+    }
 }

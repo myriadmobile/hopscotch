@@ -70,4 +70,32 @@ class AddCircleOp extends AbstractPathOp {
         parcel.writeFloat(radius);
         parcel.writeInt(dir.ordinal());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddCircleOp)) {
+            return false;
+        }
+
+        AddCircleOp other = (AddCircleOp) o;
+
+        return x == other.x &&
+                y == other.y &&
+                radius == other.radius &&
+                dir == other.dir;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + Float.floatToIntBits(x);
+        result = 31 * result + Float.floatToIntBits(y);
+        result = 31 * result + Float.floatToIntBits(radius);
+        result = 31 * result + dir.hashCode();
+        return result;
+    }
 }

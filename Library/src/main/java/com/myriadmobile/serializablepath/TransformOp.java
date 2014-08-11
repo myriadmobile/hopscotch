@@ -64,4 +64,27 @@ class TransformOp extends AbstractPathOp {
     public void writeToParcel(Parcel parcel) {
         parcel.writeParcelable(matrix, 0);
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof TransformOp)) {
+            return false;
+        }
+
+        TransformOp other = (TransformOp) o;
+
+        return matrix.equals(other.matrix);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 213;
+        result = 31 * result + matrix.hashCode();
+        return result;
+    }
 }

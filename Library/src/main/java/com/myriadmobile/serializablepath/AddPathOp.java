@@ -98,4 +98,30 @@ class AddPathOp extends AbstractPathOp {
         parcel.writeValue(dx);
         parcel.writeValue(dy);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddPathOp)) {
+            return false;
+        }
+
+        AddPathOp other = (AddPathOp) o;
+
+        boolean x = (dx == null && other.dx == null) || (dx != null && dx.equals(other.dx));
+        boolean y = (dy == null && other.dy == null) || (dy != null && dy.equals(other.dy));
+        return x && y && sPath.equals(other.sPath);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + (dx == null ? 0 : Float.floatToIntBits(dx));
+        result = 31 * result + (dx == null ? 0 : Float.floatToIntBits(dy));
+        result = 31 * result + sPath.hashCode();
+        return result;
+    }
 }

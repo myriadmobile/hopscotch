@@ -70,4 +70,27 @@ class AddRectOp extends AbstractPathOp {
         parcel.writeParcelable(rect, 0);
         parcel.writeInt(dir.ordinal());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddRectOp)) {
+            return false;
+        }
+
+        AddRectOp other = (AddRectOp) o;
+
+        return dir.equals(other.dir) && rect.equals(other.rect);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 31;
+        result = 31 * result + dir.hashCode();
+        result = 31 * result + rect.hashCode();
+        return result;
+    }
 }

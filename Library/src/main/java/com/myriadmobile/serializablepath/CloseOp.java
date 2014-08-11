@@ -54,4 +54,14 @@ class CloseOp extends AbstractPathOp {
     void writeToParcel(Parcel parcel) {
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof CloseOp;
+    }
+
+    @Override
+    public int hashCode() {
+        return 884;
+    }
 }

@@ -79,10 +79,39 @@ class ArcToOp extends AbstractPathOp {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof ArcToOp)) {
+            return false;
+        }
+
+        ArcToOp other = (ArcToOp) o;
+
+        boolean rr = (force == null && other.force == null) || (force != null && force.equals(other.force));
+        return rr &&
+                oval.equals(other.oval) &&
+                startAngle == other.startAngle &&
+                sweepAngle == other.sweepAngle;
+    }
+
+    @Override
     void writeToParcel(Parcel parcel) {
         parcel.writeParcelable(oval, 0);
         parcel.writeFloat(startAngle);
         parcel.writeFloat(sweepAngle);
         parcel.writeValue(force);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + (force != null && force ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(startAngle);
+        result = 31 * result + Float.floatToIntBits(sweepAngle);
+        result = 31 * result + oval.hashCode();
+        return result;
     }
 }

@@ -66,4 +66,30 @@ class AddArcOp extends AbstractPathOp {
         parcel.writeFloat(startAngle);
         parcel.writeFloat(sweepAngle);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddArcOp)) {
+            return false;
+        }
+
+        AddArcOp other = (AddArcOp) o;
+
+        return oval.equals(other.oval) &&
+                startAngle == other.startAngle &&
+                sweepAngle == other.sweepAngle;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + Float.floatToIntBits(startAngle);
+        result = 31 * result + Float.floatToIntBits(sweepAngle);
+        result = 31 * result + oval.hashCode();
+        return result;
+    }
 }

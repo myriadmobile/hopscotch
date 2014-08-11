@@ -79,4 +79,31 @@ class MoveToOp extends AbstractPathOp {
         parcel.writeFloat(y);
         parcel.writeValue(r);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof MoveToOp)) {
+            return false;
+        }
+
+        MoveToOp other = (MoveToOp) o;
+
+        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
+        return  rr &&
+                x == other.x &&
+                y == other.y;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 63;
+        result = 31 * result + (r != null && r ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(x);
+        result = 31 * result + Float.floatToIntBits(y);
+        return result;
+    }
 }

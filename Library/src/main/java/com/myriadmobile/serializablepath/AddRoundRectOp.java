@@ -28,6 +28,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Parcel;
 
+import java.util.Arrays;
+
 /**
  * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
  */
@@ -67,5 +69,31 @@ class AddRoundRectOp extends AbstractPathOp {
         parcel.writeParcelable(rect, 0);
         parcel.writeInt(dir.ordinal());
         parcel.writeFloatArray(radii);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddRoundRectOp)) {
+            return false;
+        }
+
+        AddRoundRectOp other = (AddRoundRectOp) o;
+
+        return rect.equals(other.rect) &&
+                Arrays.equals(radii, other.radii) &&
+                dir == other.dir;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + dir.hashCode();
+        result = 31 * result + Arrays.hashCode(radii);
+        result = 31 * result + rect.hashCode();
+        return result;
     }
 }

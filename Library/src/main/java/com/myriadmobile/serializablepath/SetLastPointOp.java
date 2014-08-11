@@ -63,4 +63,28 @@ class SetLastPointOp extends AbstractPathOp {
         parcel.writeFloat(dx);
         parcel.writeFloat(dy);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof SetLastPointOp)) {
+            return false;
+        }
+
+        SetLastPointOp other = (SetLastPointOp) o;
+
+        return dx == other.dx &&
+                dy == other.dy;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 63;
+        result = 31 * result + Float.floatToIntBits(dx);
+        result = 31 * result + Float.floatToIntBits(dy);
+        return result;
+    }
 }

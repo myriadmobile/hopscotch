@@ -63,4 +63,28 @@ class OffsetOp extends AbstractPathOp {
         parcel.writeFloat(dx);
         parcel.writeFloat(dy);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof OffsetOp)) {
+            return false;
+        }
+
+        OffsetOp other = (OffsetOp) o;
+
+        return  dx == other.dx &&
+                dy == other.dy;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 24;
+        result = 31 * result + Float.floatToIntBits(dx);
+        result = 31 * result + Float.floatToIntBits(dy);
+        return result;
+    }
 }

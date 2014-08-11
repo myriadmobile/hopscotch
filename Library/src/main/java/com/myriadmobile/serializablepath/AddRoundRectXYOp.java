@@ -72,4 +72,32 @@ class AddRoundRectXYOp extends AbstractPathOp {
         parcel.writeFloat(rx);
         parcel.writeFloat(ry);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof AddRoundRectXYOp)) {
+            return false;
+        }
+
+        AddRoundRectXYOp other = (AddRoundRectXYOp) o;
+
+        return rect.equals(other.rect) &&
+                rx == other.rx &&
+                ry == other.ry &&
+                dir == other.dir;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 23;
+        result = 31 * result + dir.hashCode();
+        result = 31 * result + Float.floatToIntBits(rx);
+        result = 31 * result + Float.floatToIntBits(ry);
+        result = 31 * result + rect.hashCode();
+        return result;
+    }
 }

@@ -95,4 +95,24 @@ public class SerializableMatrix implements Serializable, Parcelable {
             return new SerializableMatrix[i];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof SerializableMatrix)) {
+            return false;
+        }
+
+        return Arrays.equals(values, ((SerializableMatrix) o).values);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 151;
+        result = 31 * result + Arrays.hashCode(values);
+        return result;
+    }
 }

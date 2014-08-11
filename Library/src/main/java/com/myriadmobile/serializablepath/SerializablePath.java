@@ -674,6 +674,16 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         }
     }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + mFillType.ordinal();
+        for(AbstractPathOp op : mOperations) {
+            result = 31 * result + op.hashCode();
+        }
+        return result;
+    }
+
     /**
      * @param path Path to compare to
      *
