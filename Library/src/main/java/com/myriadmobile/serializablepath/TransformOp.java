@@ -33,7 +33,7 @@ import android.os.Parcel;
  */
 class TransformOp extends AbstractPathOp {
 
-    private SerializableMatrix matrix;
+    private final SerializableMatrix matrix;
 
     public TransformOp(Matrix matrix) {
         super(null);

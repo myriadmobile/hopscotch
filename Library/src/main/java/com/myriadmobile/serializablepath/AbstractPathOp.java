@@ -70,7 +70,9 @@ abstract class AbstractPathOp implements Parcelable {
      * Constructor used to make an instance from unmarshalling
      * @param parcel the Parcel storing data to restore from
      */
-    protected AbstractPathOp(Parcel parcel) { }
+    protected AbstractPathOp(Parcel parcel) {
+        //nothing to see here, move along
+    }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -115,7 +117,7 @@ abstract class AbstractPathOp implements Parcelable {
             case ADD_PATH_OP: return new AddPathOp(parcel);
             case ADD_RECT_OP: return new AddRectOp(parcel);
             case ADD_ROUND_RECT_OP: return new AddRoundRectOp(parcel);
-            case ADD_ROUND_RECT_XY_OP: return new AddRoundRectOp(parcel);
+            case ADD_ROUND_RECT_XY_OP: return new AddRoundRectXYOp(parcel);
             case ARC_TO_OP: return new ArcToOp(parcel);
             case CLOSE_OP: return new CloseOp(parcel);
             case CUBIC_TO_OP: return new CubicToOp(parcel);

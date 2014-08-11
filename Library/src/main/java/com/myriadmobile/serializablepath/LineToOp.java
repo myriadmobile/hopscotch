@@ -47,7 +47,7 @@ class LineToOp extends AbstractPathOp {
         super(null);
         this.x = dx;
         this.y = dy;
-        this.r = true;
+        this.r = r;
     }
 
     public LineToOp(Parcel parcel) {
