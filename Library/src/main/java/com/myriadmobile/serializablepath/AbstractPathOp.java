@@ -66,9 +66,11 @@ abstract class AbstractPathOp implements Parcelable {
         }
     };
 
-    protected AbstractPathOp(Parcel parcel) {
-        //Here so subclasses are required to implement this constructor
-    }
+    /**
+     * Constructor used to make an instance from unmarshalling
+     * @param parcel the Parcel storing data to restore from
+     */
+    protected AbstractPathOp(Parcel parcel) { }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -76,6 +78,10 @@ abstract class AbstractPathOp implements Parcelable {
         writeToParcel(parcel);
     }
 
+    /**
+     * Get the type id as defined by the *_OP constants in {@link com.myriadmobile.serializablepath.AbstractPathOp}
+     * @return
+     */
     protected abstract int getOpId();
 
     @Override
@@ -83,10 +89,24 @@ abstract class AbstractPathOp implements Parcelable {
         return 0;
     }
 
+    /**
+     * Apply the operation to an actual {@link android.graphics.Path}
+     * @param path the Path to apply the operation to
+     */
     abstract void applyToPath(Path path);
 
+    /**
+     * subclasses write data to the parcel in this method, not {@link #writeToParcel(android.os.Parcel, int)}
+     * @param parcel
+     */
     abstract void writeToParcel(Parcel parcel);
 
+    /**
+     * Make a new concrete class instance of {@link com.myriadmobile.serializablepath.AbstractPathOp}
+     * @param id the Op type id
+     * @param parcel the data
+     * @return an concrete instance of {@link com.myriadmobile.serializablepath.AbstractPathOp}
+     */
     private static AbstractPathOp makeInstance(int id, Parcel parcel) {
         switch (id) {
             case ADD_ARC_OP: return new AddArcOp(parcel);

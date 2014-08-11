@@ -40,6 +40,11 @@ class TransformOp extends AbstractPathOp {
         this.matrix = new SerializableMatrix(matrix);
     }
 
+    public TransformOp(SerializableMatrix matrix) {
+        super(null);
+        this.matrix = new SerializableMatrix(matrix);
+    }
+
     public TransformOp(Parcel parcel) {
         super(parcel);
         matrix = parcel.readParcelable(SerializableMatrix.class.getClassLoader());

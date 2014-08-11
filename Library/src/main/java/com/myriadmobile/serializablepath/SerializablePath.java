@@ -37,12 +37,17 @@ import java.util.ArrayList;
  * A mostly drop in replacement for {@link android.graphics.Path} that implements
  * {@link java.io.Serializable}, {@link android.os.Parcelable} and {@link java.lang.Comparable}
  *
+ * This does not implement {@link Path#op(android.graphics.Path, android.graphics.Path.Op)} or
+ * {@link Path#op(android.graphics.Path, android.graphics.Path, android.graphics.Path.Op)}
+ * introduced in API 19, and there are no plans to do so. The implementation would introduce great
+ * complexity to this library.
+ *
  * @see android.graphics.Path
  */
 public class SerializablePath implements Serializable, Comparable<SerializablePath>, Parcelable {
 
     private Path.FillType mFillType;
-    private ArrayList<AbstractPathOp> mOperations;
+    private final ArrayList<AbstractPathOp> mOperations;
 
     /**
      * Create a new path, copying the contents from the src path.
@@ -114,6 +119,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *
      * @param src The path to add as a new contour
      * @param dx  The amount to translate the path in X as it is added
+     * @param dy  The amount to translate the path in Y as it is added
      */
     public void addPath(SerializablePath src, float dx, float dy) {
         mOperations.add(new AddPathOp(src, dx, dy));
@@ -139,6 +145,18 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * @param matrix matrix to use for transform
      */
     public void addPath(SerializablePath path, Matrix matrix) {
+        mOperations.add(new AddPathOp(path, matrix));
+    }
+
+    /**
+     * Add a copy of src to the path, transformed by matrix
+     *
+     * @see android.graphics.Path#addPath(android.graphics.Path, android.graphics.Matrix)
+     *
+     * @param path The path to add as a new contour
+     * @param matrix matrix to use for transform
+     */
+    public void addPath(SerializablePath path, SerializableMatrix matrix) {
         mOperations.add(new AddPathOp(path, matrix));
     }
 
@@ -250,6 +268,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     public boolean isRect(RectF rect) {
         return makePath().isRect(rect);
     }
+
     /**
      * Compute the bounds of the control points of the path, and write the
      * answer into bounds. If the path contains 0 or 1 points, the bounds is
@@ -419,6 +438,13 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * Same as cubicTo, but the coordinates are considered relative to the
      * current point on this contour. If there is no previous point, then a
      * moveTo(0,0) is inserted automatically.
+     *
+     * @param x1 The x-coordinate of the 1st control point on a cubic curve
+     * @param y1 The y-coordinate of the 1st control point on a cubic curve
+     * @param x2 The x-coordinate of the 2nd control point on a cubic curve
+     * @param y2 The y-coordinate of the 2nd control point on a cubic curve
+     * @param x3 The x-coordinate of the end point on a cubic curve
+     * @param y3 The y-coordinate of the end point on a cubic curve
      */
     public void rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
         mOperations.add(new CubicToOp(x1, y1, x2, y2, x3, y3, true));
@@ -492,7 +518,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      *
      * This implementation is the same as {@link #reset()}
      *
-     * @see android.graphics.Path#reset()
+     * @see android.graphics.Path#rewind()
      */
     public void rewind() {
         mOperations.clear();
@@ -502,10 +528,12 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
      * Replace the contents of this with the contents of src.
      *
      * @see Path#set(android.graphics.Path)
+     *
+     * @param src Path to copy
      */
-    public void set(SerializablePath path) {
-        path.reset();
-        path.mOperations.addAll(mOperations);
+    public void set(SerializablePath src) {
+        src.reset();
+        mOperations.addAll(src.mOperations);
     }
 
     /**
@@ -567,6 +595,26 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     /**
+     * Transform the points in this path by matrix, and write the answer
+     * into dst. If dst is null, then the the original path is modified.
+     *
+     * @see android.graphics.Path#transform(android.graphics.Matrix, android.graphics.Path)
+     *
+     * @param matrix The matrix to apply to the path
+     * @param dst    The transformed path is written here. If dst is null,
+     *               then the the original path is modified
+     */
+    public void transform(SerializableMatrix matrix, SerializablePath dst) {
+        if(dst == null) {
+            transform(matrix);
+        }
+        else {
+            dst.set(this);
+            dst.transform(matrix);
+        }
+    }
+
+    /**
      * Transform the points in this path by matrix.
      *
      * @see android.graphics.Path#transform(android.graphics.Matrix)
@@ -578,7 +626,19 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
     }
 
     /**
+     * Transform the points in this path by matrix.
+     *
+     * @see android.graphics.Path#transform(android.graphics.Matrix)
+     *
+     * @param matrix The matrix to apply to the path
+     */
+    public void transform(SerializableMatrix matrix) {
+        mOperations.add(new TransformOp(matrix));
+    }
+
+    /**
      * Generate a {@link android.graphics.Path}
+     *
      * @return a generated Path
      */
     public Path makePath() {
@@ -614,6 +674,7 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
 
     /**
      * @param path Path to compare to
+     *
      * @return negative if this path has more ops, positive otherwise
      */
     @Override
@@ -621,6 +682,11 @@ public class SerializablePath implements Serializable, Comparable<SerializablePa
         return mOperations.size() - path.mOperations.size();
     }
 
+    //
+    //
+    // Parcelable stuff below
+    //
+    //
 
     @Override
     public int describeContents() {

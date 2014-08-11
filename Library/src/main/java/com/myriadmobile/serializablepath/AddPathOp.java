@@ -61,6 +61,14 @@ class AddPathOp extends AbstractPathOp {
         this.dy = null;
     }
 
+    public AddPathOp(SerializablePath path, SerializableMatrix matrix) {
+        super(null);
+        this.sPath = new SerializablePath(path);
+        sPath.transform(matrix);
+        this.dx = null;
+        this.dy = null;
+    }
+
     public AddPathOp(Parcel parcel) {
         super(parcel);
 

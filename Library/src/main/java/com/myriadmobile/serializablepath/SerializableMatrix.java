@@ -29,6 +29,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * {@link java.io.Serializable} and {@link android.os.Parcelable } version
@@ -47,6 +48,14 @@ public class SerializableMatrix implements Serializable, Parcelable {
         parcel.readFloatArray(values);
     }
 
+    public SerializableMatrix(SerializableMatrix matrix) {
+        setMatrix(matrix);
+    }
+
+    private void setMatrix(SerializableMatrix matrix) {
+        values = Arrays.copyOf(matrix.values, 9);
+    }
+
     public void setMatrix(Matrix matrix) {
         values = new float[9];
         matrix.getValues(values);
@@ -57,6 +66,12 @@ public class SerializableMatrix implements Serializable, Parcelable {
         matrix.setValues(values);
         return matrix;
     }
+
+    //
+    //
+    // Parcelable stuff below
+    //
+    //
 
     @Override
     public int describeContents() {
