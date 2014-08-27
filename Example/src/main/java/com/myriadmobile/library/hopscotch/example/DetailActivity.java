@@ -30,6 +30,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.myriadmobile.library.hopscotch.SerializablePath;
 
@@ -47,6 +48,8 @@ public class DetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         SerializablePath path = getIntent().getParcelableExtra(EXTRA_PATH_PARCELABLE);
         SerializablePath path2 = (SerializablePath) getIntent().getSerializableExtra(EXTRA_PATH_SERIALIZABLE);
@@ -79,5 +82,14 @@ public class DetailActivity extends Activity {
 
         Log.d(TAG, "Hash: " + path.hashCode() + " Hash2: " + path2.hashCode());
         Log.d(TAG, "Equals: " + path.equals(path2));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
