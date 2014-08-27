@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.myriadmobile.library.serializablepath.example"
+        applicationId "com.myriadmobile.library.hopscotch.example"
         minSdkVersion 15
         targetSdkVersion 19
         versionCode 1
@@ -20,6 +20,6 @@ android {
 }
 
 dependencies {
-    //compile project(':Library')
-    compile 'com.myriadmobile.library:serializablepath:0.9.4'
+    compile project(':Library')
+    //compile 'com.myriadmobile.library:hopscotch:0.9.4'
 }

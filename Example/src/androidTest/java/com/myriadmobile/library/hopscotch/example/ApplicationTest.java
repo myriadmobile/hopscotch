@@ -1,4 +1,4 @@
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch.example;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

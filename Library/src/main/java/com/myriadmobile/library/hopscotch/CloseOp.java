@@ -22,69 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
-import android.graphics.Matrix;
 import android.graphics.Path;
 import android.os.Parcel;
 
 /**
- * @see Path#transform(android.graphics.Matrix)
+ * @see android.graphics.Path#close()
  */
-class TransformOp extends AbstractPathOp {
+class CloseOp extends AbstractPathOp {
 
-    private final SerializableMatrix matrix;
-
-    public TransformOp(Matrix matrix) {
-        super(null);
-        this.matrix = new SerializableMatrix(matrix);
-    }
-
-    public TransformOp(SerializableMatrix matrix) {
-        super(null);
-        this.matrix = new SerializableMatrix(matrix);
-    }
-
-    public TransformOp(Parcel parcel) {
+    public CloseOp(Parcel parcel) {
         super(parcel);
-        matrix = parcel.readParcelable(SerializableMatrix.class.getClassLoader());
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.TRANSFORM_OP;
+        return AbstractPathOp.CLOSE_OP;
+    }
+
+    public CloseOp() {
+        super(null);
     }
 
     @Override
     void applyToPath(Path path) {
-        path.transform(matrix.getMatrix());
+        path.close();
     }
 
     @Override
-    public void writeToParcel(Parcel parcel) {
-        parcel.writeParcelable(matrix, 0);
-    }
+    void writeToParcel(Parcel parcel) {
 
+    }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) {
-            return true;
-        }
-
-        if(!(o instanceof TransformOp)) {
-            return false;
-        }
-
-        TransformOp other = (TransformOp) o;
-
-        return matrix.equals(other.matrix);
+        return o instanceof CloseOp;
     }
 
     @Override
     public int hashCode() {
-        int result = 213;
-        result = 31 * result + matrix.hashCode();
-        return result;
+        return 884;
     }
 }

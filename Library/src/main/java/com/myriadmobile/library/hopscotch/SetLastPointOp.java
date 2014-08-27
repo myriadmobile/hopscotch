@@ -22,62 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.os.Parcel;
 
 /**
- * @see Path#lineTo(float, float)
+ * @see android.graphics.Path#setLastPoint(float, float)
  */
-class LineToOp extends AbstractPathOp {
+class SetLastPointOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
-    private final Boolean r;
+    private final float dx;
+    private final float dy;
 
-    public LineToOp(float x, float y) {
+    public SetLastPointOp(float dx, float dy) {
         super(null);
-        this.x = x;
-        this.y = y;
-        this.r = null;
+        this.dx = dx;
+        this.dy = dy;
     }
 
-    public LineToOp(float dx, float dy, boolean r) {
-        super(null);
-        this.x = dx;
-        this.y = dy;
-        this.r = r;
-    }
-
-    public LineToOp(Parcel parcel) {
+    public SetLastPointOp(Parcel parcel) {
         super(parcel);
 
-        x = parcel.readFloat();
-        y = parcel.readFloat();
-        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
+        dx = parcel.readFloat();
+        dy = parcel.readFloat();
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.LINE_TO_OP;
+        return AbstractPathOp.SET_LAST_POINT_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        if(r == null) {
-            path.lineTo(x, y);
-        }
-        else {
-            path.rLineTo(x, y);
-        }
+        path.setLastPoint(dx, dy);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeFloat(x);
-        parcel.writeFloat(y);
-        parcel.writeValue(r);
+        parcel.writeFloat(dx);
+        parcel.writeFloat(dy);
     }
 
     @Override
@@ -86,24 +70,21 @@ class LineToOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof LineToOp)) {
+        if(!(o instanceof SetLastPointOp)) {
             return false;
         }
 
-        LineToOp other = (LineToOp) o;
+        SetLastPointOp other = (SetLastPointOp) o;
 
-        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
-        return  rr &&
-                x == other.x &&
-                y == other.y;
+        return dx == other.dx &&
+                dy == other.dy;
     }
 
     @Override
     public int hashCode() {
-        int result = 23;
-        result = 31 * result + (r != null && r ? 0 : 1);
-        result = 31 * result + Float.floatToIntBits(x);
-        result = 31 * result + Float.floatToIntBits(y);
+        int result = 63;
+        result = 31 * result + Float.floatToIntBits(dx);
+        result = 31 * result + Float.floatToIntBits(dy);
         return result;
     }
 }

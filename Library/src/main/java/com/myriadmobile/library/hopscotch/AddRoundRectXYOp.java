@@ -22,53 +22,55 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Parcel;
 
-import java.util.Arrays;
-
 /**
- * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
+ * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float, float, android.graphics.Path.Direction)
  */
-class AddRoundRectOp extends AbstractPathOp {
+class AddRoundRectXYOp extends AbstractPathOp {
 
     private final RectF rect;
-    private float[] radii;
+    private final float rx;
+    private final float ry;
     private final Path.Direction dir;
 
-    public AddRoundRectOp(RectF rect, float[] radii, Path.Direction dir) {
+    public AddRoundRectXYOp(RectF rect, float rx, float ry, Path.Direction dir) {
         super(null);
         this.rect = rect;
-        this.radii = radii;
+        this.rx = rx;
+        this.ry = ry;
         this.dir = dir;
     }
 
-    public AddRoundRectOp(Parcel parcel) {
+    public AddRoundRectXYOp(Parcel parcel) {
         super(parcel);
 
         rect = parcel.readParcelable(RectF.class.getClassLoader());
         dir = Path.Direction.values()[parcel.readInt()];
-        parcel.readFloatArray(radii);
+        rx = parcel.readFloat();
+        ry = parcel.readFloat();
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_ROUND_RECT_OP;
+        return AbstractPathOp.ADD_ROUND_RECT_XY_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addRoundRect(rect, radii, dir);
+        path.addRoundRect(rect, rx, ry, dir);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
         parcel.writeParcelable(rect, 0);
         parcel.writeInt(dir.ordinal());
-        parcel.writeFloatArray(radii);
+        parcel.writeFloat(rx);
+        parcel.writeFloat(ry);
     }
 
     @Override
@@ -77,14 +79,15 @@ class AddRoundRectOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddRoundRectOp)) {
+        if(!(o instanceof AddRoundRectXYOp)) {
             return false;
         }
 
-        AddRoundRectOp other = (AddRoundRectOp) o;
+        AddRoundRectXYOp other = (AddRoundRectXYOp) o;
 
         return rect.equals(other.rect) &&
-                Arrays.equals(radii, other.radii) &&
+                rx == other.rx &&
+                ry == other.ry &&
                 dir == other.dir;
     }
 
@@ -92,7 +95,8 @@ class AddRoundRectOp extends AbstractPathOp {
     public int hashCode() {
         int result = 23;
         result = 31 * result + dir.hashCode();
-        result = 31 * result + Arrays.hashCode(radii);
+        result = 31 * result + Float.floatToIntBits(rx);
+        result = 31 * result + Float.floatToIntBits(ry);
         result = 31 * result + rect.hashCode();
         return result;
     }

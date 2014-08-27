@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.myriadmobile.library.serializablepath.example.SimplePathView
+    <com.myriadmobile.library.hopscotch.example.SimplePathView
         android:id="@+id/image_path"
         android:background="#FFF"
         android:layout_width="match_parent"

@@ -22,55 +22,62 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Parcel;
 
 /**
- * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float, float, android.graphics.Path.Direction)
+ * @see android.graphics.Path#moveTo(float, float)
  */
-class AddRoundRectXYOp extends AbstractPathOp {
+class MoveToOp extends AbstractPathOp {
 
-    private final RectF rect;
-    private final float rx;
-    private final float ry;
-    private final Path.Direction dir;
+    private final float x;
+    private final float y;
+    private final Boolean r;
 
-    public AddRoundRectXYOp(RectF rect, float rx, float ry, Path.Direction dir) {
+    public MoveToOp(float x, float y) {
         super(null);
-        this.rect = rect;
-        this.rx = rx;
-        this.ry = ry;
-        this.dir = dir;
+        this.x = x;
+        this.y = y;
+        this.r = null;
     }
 
-    public AddRoundRectXYOp(Parcel parcel) {
+    public MoveToOp(float dx, float dy, boolean r) {
+        super(null);
+        this.x = dx;
+        this.y = dy;
+        this.r = r;
+    }
+
+    public MoveToOp(Parcel parcel) {
         super(parcel);
 
-        rect = parcel.readParcelable(RectF.class.getClassLoader());
-        dir = Path.Direction.values()[parcel.readInt()];
-        rx = parcel.readFloat();
-        ry = parcel.readFloat();
+        x = parcel.readFloat();
+        y = parcel.readFloat();
+        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_ROUND_RECT_XY_OP;
+        return AbstractPathOp.MOVE_TO_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addRoundRect(rect, rx, ry, dir);
+        if(r == null) {
+            path.moveTo(x, y);
+        }
+        else {
+            path.rMoveTo(x, y);
+        }
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeParcelable(rect, 0);
-        parcel.writeInt(dir.ordinal());
-        parcel.writeFloat(rx);
-        parcel.writeFloat(ry);
+        parcel.writeFloat(x);
+        parcel.writeFloat(y);
+        parcel.writeValue(r);
     }
 
     @Override
@@ -79,25 +86,24 @@ class AddRoundRectXYOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddRoundRectXYOp)) {
+        if(!(o instanceof MoveToOp)) {
             return false;
         }
 
-        AddRoundRectXYOp other = (AddRoundRectXYOp) o;
+        MoveToOp other = (MoveToOp) o;
 
-        return rect.equals(other.rect) &&
-                rx == other.rx &&
-                ry == other.ry &&
-                dir == other.dir;
+        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
+        return  rr &&
+                x == other.x &&
+                y == other.y;
     }
 
     @Override
     public int hashCode() {
-        int result = 23;
-        result = 31 * result + dir.hashCode();
-        result = 31 * result + Float.floatToIntBits(rx);
-        result = 31 * result + Float.floatToIntBits(ry);
-        result = 31 * result + rect.hashCode();
+        int result = 63;
+        result = 31 * result + (r != null && r ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(x);
+        result = 31 * result + Float.floatToIntBits(y);
         return result;
     }
 }

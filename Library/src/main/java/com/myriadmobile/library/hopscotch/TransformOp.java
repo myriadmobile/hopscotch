@@ -22,50 +22,49 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
+import android.graphics.Matrix;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Parcel;
 
 /**
- * @see Path#addArc(android.graphics.RectF, float, float)
+ * @see Path#transform(android.graphics.Matrix)
  */
-class AddArcOp extends AbstractPathOp {
-    private final RectF oval;
-    private final float startAngle;
-    private final float sweepAngle;
+class TransformOp extends AbstractPathOp {
 
-    public AddArcOp(RectF oval, float startAngle, float sweepAngle) {
+    private final SerializableMatrix matrix;
+
+    public TransformOp(Matrix matrix) {
         super(null);
-        this.oval = oval;
-        this.startAngle = startAngle;
-        this.sweepAngle = sweepAngle;
+        this.matrix = new SerializableMatrix(matrix);
     }
 
-    public AddArcOp(Parcel parcel) {
+    public TransformOp(SerializableMatrix matrix) {
+        super(null);
+        this.matrix = new SerializableMatrix(matrix);
+    }
+
+    public TransformOp(Parcel parcel) {
         super(parcel);
-        this.oval = parcel.readParcelable(RectF.class.getClassLoader());
-        this.startAngle = parcel.readFloat();
-        this.sweepAngle = parcel.readFloat();
+        matrix = parcel.readParcelable(SerializableMatrix.class.getClassLoader());
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_ARC_OP;
+        return AbstractPathOp.TRANSFORM_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addArc(oval, startAngle, sweepAngle);
+        path.transform(matrix.getMatrix());
     }
 
     @Override
-    void writeToParcel(Parcel parcel) {
-        parcel.writeParcelable(oval, 0);
-        parcel.writeFloat(startAngle);
-        parcel.writeFloat(sweepAngle);
+    public void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(matrix, 0);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -73,23 +72,19 @@ class AddArcOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddArcOp)) {
+        if(!(o instanceof TransformOp)) {
             return false;
         }
 
-        AddArcOp other = (AddArcOp) o;
+        TransformOp other = (TransformOp) o;
 
-        return oval.equals(other.oval) &&
-                startAngle == other.startAngle &&
-                sweepAngle == other.sweepAngle;
+        return matrix.equals(other.matrix);
     }
 
     @Override
     public int hashCode() {
-        int result = 23;
-        result = 31 * result + Float.floatToIntBits(startAngle);
-        result = 31 * result + Float.floatToIntBits(sweepAngle);
-        result = 31 * result + oval.hashCode();
+        int result = 213;
+        result = 31 * result + matrix.hashCode();
         return result;
     }
 }

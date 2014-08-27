@@ -22,47 +22,60 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Parcel;
 
 /**
- * @see Path#addOval(android.graphics.RectF, android.graphics.Path.Direction)
+ * @see android.graphics.Path#arcTo(android.graphics.RectF, float, float)
  */
-class AddOvalOp extends AbstractPathOp {
+class ArcToOp extends AbstractPathOp {
 
     private final RectF oval;
-    private final Path.Direction dir;
+    private final float startAngle;
+    private final float sweepAngle;
+    private final Boolean force;
 
-    public AddOvalOp(RectF oval, Path.Direction dir) {
+    public ArcToOp(RectF oval, float startAngle, float sweepAngle, boolean force) {
         super(null);
         this.oval = oval;
-        this.dir = dir;
+        this.startAngle = startAngle;
+        this.sweepAngle = sweepAngle;
+        this.force = force;
     }
 
-    public AddOvalOp(Parcel parcel) {
+    public ArcToOp(RectF oval, float startAngle, float sweepAngle) {
+        super(null);
+        this.oval = oval;
+        this.startAngle = startAngle;
+        this.sweepAngle = sweepAngle;
+        this.force = null;
+    }
+
+    public ArcToOp(Parcel parcel) {
         super(parcel);
 
         oval = parcel.readParcelable(RectF.class.getClassLoader());
-        dir = Path.Direction.values()[parcel.readInt()];
+        startAngle = parcel.readFloat();
+        sweepAngle = parcel.readFloat();
+        force = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_OVAL_OP;
+        return ARC_TO_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addOval(oval, dir);
-    }
-
-    @Override
-    void writeToParcel(Parcel parcel) {
-        parcel.writeParcelable(oval, 0);
-        parcel.writeInt(dir.ordinal());
+        if(force != null) {
+            path.arcTo(oval, startAngle, sweepAngle, force);
+        }
+        else {
+            path.arcTo(oval, startAngle, sweepAngle);
+        }
     }
 
     @Override
@@ -71,20 +84,33 @@ class AddOvalOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddOvalOp)) {
+        if(!(o instanceof ArcToOp)) {
             return false;
         }
 
-        AddOvalOp other = (AddOvalOp) o;
+        ArcToOp other = (ArcToOp) o;
 
-        return oval.equals(other.oval) &&
-                dir == other.dir;
+        boolean rr = (force == null && other.force == null) || (force != null && force.equals(other.force));
+        return rr &&
+                oval.equals(other.oval) &&
+                startAngle == other.startAngle &&
+                sweepAngle == other.sweepAngle;
+    }
+
+    @Override
+    void writeToParcel(Parcel parcel) {
+        parcel.writeParcelable(oval, 0);
+        parcel.writeFloat(startAngle);
+        parcel.writeFloat(sweepAngle);
+        parcel.writeValue(force);
     }
 
     @Override
     public int hashCode() {
         int result = 23;
-        result = 31 * result + dir.hashCode();
+        result = 31 * result + (force != null && force ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(startAngle);
+        result = 31 * result + Float.floatToIntBits(sweepAngle);
         result = 31 * result + oval.hashCode();
         return result;
     }

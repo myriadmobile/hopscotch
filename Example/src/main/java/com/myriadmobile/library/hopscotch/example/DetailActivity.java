@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath.example;
+package com.myriadmobile.library.hopscotch.example;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -31,17 +31,17 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.myriadmobile.library.serializablepath.SerializablePath;
+import com.myriadmobile.library.hopscotch.SerializablePath;
 
 /**
- * Receiver for sent {@link com.myriadmobile.library.serializablepath.SerializablePath}s
+ * Receiver for sent {@link com.myriadmobile.library.hopscotch.SerializablePath}s
  */
 public class DetailActivity extends Activity {
 
     public static final String TAG = DetailActivity.class.getSimpleName();
 
-    public static final String EXTRA_PATH_PARCELABLE = "com.myriadmobile.library.serializablepath.example.EXTRA_PATH_PARCELABLE";
-    public static final String EXTRA_PATH_SERIALIZABLE = "com.myriadmobile.library.serializablepath.example.EXTRA_PATH_SERIALIZABLE";
+    public static final String EXTRA_PATH_PARCELABLE = "com.myriadmobile.library.hopscotch.example.EXTRA_PATH_PARCELABLE";
+    public static final String EXTRA_PATH_SERIALIZABLE = "com.myriadmobile.library.hopscotch.example.EXTRA_PATH_SERIALIZABLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

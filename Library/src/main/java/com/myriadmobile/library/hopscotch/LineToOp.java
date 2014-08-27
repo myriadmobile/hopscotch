@@ -22,46 +22,62 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.os.Parcel;
 
 /**
- * @see android.graphics.Path#offset(float, float)
+ * @see Path#lineTo(float, float)
  */
-class OffsetOp extends AbstractPathOp {
+class LineToOp extends AbstractPathOp {
 
-    private final float dx;
-    private final float dy;
+    private final float x;
+    private final float y;
+    private final Boolean r;
 
-    public OffsetOp(float dx, float dy) {
+    public LineToOp(float x, float y) {
         super(null);
-        this.dx = dx;
-        this.dy = dy;
+        this.x = x;
+        this.y = y;
+        this.r = null;
     }
 
-    public OffsetOp(Parcel parcel) {
+    public LineToOp(float dx, float dy, boolean r) {
+        super(null);
+        this.x = dx;
+        this.y = dy;
+        this.r = r;
+    }
+
+    public LineToOp(Parcel parcel) {
         super(parcel);
 
-        dx = parcel.readFloat();
-        dy = parcel.readFloat();
+        x = parcel.readFloat();
+        y = parcel.readFloat();
+        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.OFFSET_OP;
+        return AbstractPathOp.LINE_TO_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.offset(dx, dy);
+        if(r == null) {
+            path.lineTo(x, y);
+        }
+        else {
+            path.rLineTo(x, y);
+        }
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeFloat(dx);
-        parcel.writeFloat(dy);
+        parcel.writeFloat(x);
+        parcel.writeFloat(y);
+        parcel.writeValue(r);
     }
 
     @Override
@@ -70,21 +86,24 @@ class OffsetOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof OffsetOp)) {
+        if(!(o instanceof LineToOp)) {
             return false;
         }
 
-        OffsetOp other = (OffsetOp) o;
+        LineToOp other = (LineToOp) o;
 
-        return  dx == other.dx &&
-                dy == other.dy;
+        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
+        return  rr &&
+                x == other.x &&
+                y == other.y;
     }
 
     @Override
     public int hashCode() {
-        int result = 24;
-        result = 31 * result + Float.floatToIntBits(dx);
-        result = 31 * result + Float.floatToIntBits(dy);
+        int result = 23;
+        result = 31 * result + (r != null && r ? 0 : 1);
+        result = 31 * result + Float.floatToIntBits(x);
+        result = 31 * result + Float.floatToIntBits(y);
         return result;
     }
 }

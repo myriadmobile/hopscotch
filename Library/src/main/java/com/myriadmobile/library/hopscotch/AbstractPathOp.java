@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.os.Parcel;
@@ -30,7 +30,7 @@ import android.os.Parcelable;
 
 /**
  * Abstract class to holds information about different ops made onto
- * a {@link com.myriadmobile.library.serializablepath.SerializablePath} so it can be
+ * a {@link com.myriadmobile.library.hopscotch.SerializablePath} so it can be
  * serialized out and recreated later
  */
 abstract class AbstractPathOp implements Parcelable {
@@ -81,7 +81,7 @@ abstract class AbstractPathOp implements Parcelable {
     }
 
     /**
-     * Get the type id as defined by the *_OP constants in {@link com.myriadmobile.library.serializablepath.AbstractPathOp}
+     * Get the type id as defined by the *_OP constants in {@link com.myriadmobile.library.hopscotch.AbstractPathOp}
      * @return
      */
     protected abstract int getOpId();
@@ -104,10 +104,10 @@ abstract class AbstractPathOp implements Parcelable {
     abstract void writeToParcel(Parcel parcel);
 
     /**
-     * Make a new concrete class instance of {@link com.myriadmobile.library.serializablepath.AbstractPathOp}
+     * Make a new concrete class instance of {@link com.myriadmobile.library.hopscotch.AbstractPathOp}
      * @param id the Op type id
      * @param parcel the data
-     * @return an concrete instance of {@link com.myriadmobile.library.serializablepath.AbstractPathOp}
+     * @return an concrete instance of {@link com.myriadmobile.library.hopscotch.AbstractPathOp}
      */
     private static AbstractPathOp makeInstance(int id, Parcel parcel) {
         switch (id) {

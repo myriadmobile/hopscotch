@@ -22,52 +22,52 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Parcel;
 
 /**
- * @see Path#addCircle(float, float, float, android.graphics.Path.Direction)
+ * @see android.graphics.Path#addRect(android.graphics.RectF, android.graphics.Path.Direction)
  */
-class AddCircleOp extends AbstractPathOp {
+class AddRectOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
-    private final float radius;
+    private final RectF rect;
     private final Path.Direction dir;
 
-    public AddCircleOp(float x, float y, float radius, Path.Direction dir) {
+    public AddRectOp(RectF rect, Path.Direction dir) {
         super(null);
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
+        this.rect = rect;
         this.dir = dir;
     }
 
-    public AddCircleOp(Parcel parcel) {
+    public AddRectOp(float left, float top, float right, float bottom, Path.Direction dir) {
+        super(null);
+        this.rect = new RectF(left, top, right, bottom);
+        this.dir = dir;
+    }
+
+    public AddRectOp(Parcel parcel) {
         super(parcel);
-        x = parcel.readFloat();
-        y = parcel.readFloat();
-        radius = parcel.readFloat();
+
+        rect = parcel.readParcelable(RectF.class.getClassLoader());
         dir = Path.Direction.values()[parcel.readInt()];
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_CIRCLE_OP;
+        return AbstractPathOp.ADD_RECT_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addCircle(x, y, radius, dir);
+        path.addRect(rect, dir);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeFloat(x);
-        parcel.writeFloat(y);
-        parcel.writeFloat(radius);
+        parcel.writeParcelable(rect, 0);
         parcel.writeInt(dir.ordinal());
     }
 
@@ -77,25 +77,20 @@ class AddCircleOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddCircleOp)) {
+        if(!(o instanceof AddRectOp)) {
             return false;
         }
 
-        AddCircleOp other = (AddCircleOp) o;
+        AddRectOp other = (AddRectOp) o;
 
-        return x == other.x &&
-                y == other.y &&
-                radius == other.radius &&
-                dir == other.dir;
+        return dir.equals(other.dir) && rect.equals(other.rect);
     }
 
     @Override
     public int hashCode() {
-        int result = 23;
-        result = 31 * result + Float.floatToIntBits(x);
-        result = 31 * result + Float.floatToIntBits(y);
-        result = 31 * result + Float.floatToIntBits(radius);
+        int result = 31;
         result = 31 * result + dir.hashCode();
+        result = 31 * result + rect.hashCode();
         return result;
     }
 }

@@ -22,46 +22,53 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.os.Parcel;
 
 /**
- * @see android.graphics.Path#setLastPoint(float, float)
+ * @see Path#addCircle(float, float, float, android.graphics.Path.Direction)
  */
-class SetLastPointOp extends AbstractPathOp {
+class AddCircleOp extends AbstractPathOp {
 
-    private final float dx;
-    private final float dy;
+    private final float x;
+    private final float y;
+    private final float radius;
+    private final Path.Direction dir;
 
-    public SetLastPointOp(float dx, float dy) {
+    public AddCircleOp(float x, float y, float radius, Path.Direction dir) {
         super(null);
-        this.dx = dx;
-        this.dy = dy;
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.dir = dir;
     }
 
-    public SetLastPointOp(Parcel parcel) {
+    public AddCircleOp(Parcel parcel) {
         super(parcel);
-
-        dx = parcel.readFloat();
-        dy = parcel.readFloat();
+        x = parcel.readFloat();
+        y = parcel.readFloat();
+        radius = parcel.readFloat();
+        dir = Path.Direction.values()[parcel.readInt()];
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.SET_LAST_POINT_OP;
+        return AbstractPathOp.ADD_CIRCLE_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.setLastPoint(dx, dy);
+        path.addCircle(x, y, radius, dir);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeFloat(dx);
-        parcel.writeFloat(dy);
+        parcel.writeFloat(x);
+        parcel.writeFloat(y);
+        parcel.writeFloat(radius);
+        parcel.writeInt(dir.ordinal());
     }
 
     @Override
@@ -70,21 +77,25 @@ class SetLastPointOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof SetLastPointOp)) {
+        if(!(o instanceof AddCircleOp)) {
             return false;
         }
 
-        SetLastPointOp other = (SetLastPointOp) o;
+        AddCircleOp other = (AddCircleOp) o;
 
-        return dx == other.dx &&
-                dy == other.dy;
+        return x == other.x &&
+                y == other.y &&
+                radius == other.radius &&
+                dir == other.dir;
     }
 
     @Override
     public int hashCode() {
-        int result = 63;
-        result = 31 * result + Float.floatToIntBits(dx);
-        result = 31 * result + Float.floatToIntBits(dy);
+        int result = 23;
+        result = 31 * result + Float.floatToIntBits(x);
+        result = 31 * result + Float.floatToIntBits(y);
+        result = 31 * result + Float.floatToIntBits(radius);
+        result = 31 * result + dir.hashCode();
         return result;
     }
 }

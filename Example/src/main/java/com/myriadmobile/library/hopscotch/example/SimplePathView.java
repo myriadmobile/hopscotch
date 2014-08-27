@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath.example;
+package com.myriadmobile.library.hopscotch.example;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package com.myriadmobile.library.serializablepath.example;
+package com.myriadmobile.library.hopscotch.example;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,13 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.myriadmobile.library.serializablepath.SerializablePath;
+import com.myriadmobile.library.hopscotch.SerializablePath;
 
 import java.io.Serializable;
 
 /**
- * Launched Activity. This will send a {@link com.myriadmobile.library.serializablepath.SerializablePath}
- * to the {@link com.myriadmobile.library.serializablepath.example.DetailActivity}
+ * Launched Activity. This will send a {@link com.myriadmobile.library.hopscotch.SerializablePath}
+ * to the {@link com.myriadmobile.library.hopscotch.example.DetailActivity}
  */
 public class MainActivity extends Activity {
 
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_view_github) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/myriadmobile/serializable-path"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/myriadmobile/hopscotch"));
             if(intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }

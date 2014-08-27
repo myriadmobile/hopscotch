@@ -22,46 +22,69 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.os.Parcel;
 
 /**
- * @see android.graphics.Path#close()
+ * @see android.graphics.Path#offset(float, float)
  */
-class CloseOp extends AbstractPathOp {
+class OffsetOp extends AbstractPathOp {
 
-    public CloseOp(Parcel parcel) {
+    private final float dx;
+    private final float dy;
+
+    public OffsetOp(float dx, float dy) {
+        super(null);
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    public OffsetOp(Parcel parcel) {
         super(parcel);
+
+        dx = parcel.readFloat();
+        dy = parcel.readFloat();
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.CLOSE_OP;
-    }
-
-    public CloseOp() {
-        super(null);
+        return AbstractPathOp.OFFSET_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.close();
+        path.offset(dx, dy);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-
+        parcel.writeFloat(dx);
+        parcel.writeFloat(dy);
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof CloseOp;
+        if(this == o) {
+            return true;
+        }
+
+        if(!(o instanceof OffsetOp)) {
+            return false;
+        }
+
+        OffsetOp other = (OffsetOp) o;
+
+        return  dx == other.dx &&
+                dy == other.dy;
     }
 
     @Override
     public int hashCode() {
-        return 884;
+        int result = 24;
+        result = 31 * result + Float.floatToIntBits(dx);
+        result = 31 * result + Float.floatToIntBits(dy);
+        return result;
     }
 }

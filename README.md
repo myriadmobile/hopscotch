@@ -1,5 +1,5 @@
-Serializable Path
-=================
+Hopscotch
+=========
 
 A drop in replacement for Android's Path which implements Serializable and Parcelable.
 
@@ -10,7 +10,7 @@ Maven
 
 Use this for Gradle, substituting the most current version:
 ```
-    compile 'com.myriadmobile.library:serializablepath:X.X.X'
+    compile 'com.myriadmobile.library:hopscotch:X.X.X'
 ```
 
 How To Use

@@ -22,62 +22,47 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Parcel;
 
 /**
- * @see android.graphics.Path#moveTo(float, float)
+ * @see Path#addOval(android.graphics.RectF, android.graphics.Path.Direction)
  */
-class MoveToOp extends AbstractPathOp {
+class AddOvalOp extends AbstractPathOp {
 
-    private final float x;
-    private final float y;
-    private final Boolean r;
+    private final RectF oval;
+    private final Path.Direction dir;
 
-    public MoveToOp(float x, float y) {
+    public AddOvalOp(RectF oval, Path.Direction dir) {
         super(null);
-        this.x = x;
-        this.y = y;
-        this.r = null;
+        this.oval = oval;
+        this.dir = dir;
     }
 
-    public MoveToOp(float dx, float dy, boolean r) {
-        super(null);
-        this.x = dx;
-        this.y = dy;
-        this.r = r;
-    }
-
-    public MoveToOp(Parcel parcel) {
+    public AddOvalOp(Parcel parcel) {
         super(parcel);
 
-        x = parcel.readFloat();
-        y = parcel.readFloat();
-        r = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
+        oval = parcel.readParcelable(RectF.class.getClassLoader());
+        dir = Path.Direction.values()[parcel.readInt()];
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.MOVE_TO_OP;
+        return AbstractPathOp.ADD_OVAL_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        if(r == null) {
-            path.moveTo(x, y);
-        }
-        else {
-            path.rMoveTo(x, y);
-        }
+        path.addOval(oval, dir);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
-        parcel.writeFloat(x);
-        parcel.writeFloat(y);
-        parcel.writeValue(r);
+        parcel.writeParcelable(oval, 0);
+        parcel.writeInt(dir.ordinal());
     }
 
     @Override
@@ -86,24 +71,21 @@ class MoveToOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof MoveToOp)) {
+        if(!(o instanceof AddOvalOp)) {
             return false;
         }
 
-        MoveToOp other = (MoveToOp) o;
+        AddOvalOp other = (AddOvalOp) o;
 
-        boolean rr = (r == null && other.r == null) || (r != null && r.equals(other.r));
-        return  rr &&
-                x == other.x &&
-                y == other.y;
+        return oval.equals(other.oval) &&
+                dir == other.dir;
     }
 
     @Override
     public int hashCode() {
-        int result = 63;
-        result = 31 * result + (r != null && r ? 0 : 1);
-        result = 31 * result + Float.floatToIntBits(x);
-        result = 31 * result + Float.floatToIntBits(y);
+        int result = 23;
+        result = 31 * result + dir.hashCode();
+        result = 31 * result + oval.hashCode();
         return result;
     }
 }

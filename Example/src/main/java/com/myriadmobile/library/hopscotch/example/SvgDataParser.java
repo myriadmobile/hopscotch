@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath.example;
+package com.myriadmobile.library.hopscotch.example;
 
 import android.content.Context;
 import android.graphics.PointF;
 
-import com.myriadmobile.library.serializablepath.SerializablePath;
+import com.myriadmobile.library.hopscotch.SerializablePath;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

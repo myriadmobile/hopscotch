@@ -22,53 +22,53 @@
  * THE SOFTWARE.
  */
 
-package com.myriadmobile.library.serializablepath;
+package com.myriadmobile.library.hopscotch;
 
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Parcel;
 
+import java.util.Arrays;
+
 /**
- * @see android.graphics.Path#addRect(android.graphics.RectF, android.graphics.Path.Direction)
+ * @see android.graphics.Path#addRoundRect(android.graphics.RectF, float[], android.graphics.Path.Direction)
  */
-class AddRectOp extends AbstractPathOp {
+class AddRoundRectOp extends AbstractPathOp {
 
     private final RectF rect;
+    private float[] radii;
     private final Path.Direction dir;
 
-    public AddRectOp(RectF rect, Path.Direction dir) {
+    public AddRoundRectOp(RectF rect, float[] radii, Path.Direction dir) {
         super(null);
         this.rect = rect;
+        this.radii = radii;
         this.dir = dir;
     }
 
-    public AddRectOp(float left, float top, float right, float bottom, Path.Direction dir) {
-        super(null);
-        this.rect = new RectF(left, top, right, bottom);
-        this.dir = dir;
-    }
-
-    public AddRectOp(Parcel parcel) {
+    public AddRoundRectOp(Parcel parcel) {
         super(parcel);
 
         rect = parcel.readParcelable(RectF.class.getClassLoader());
         dir = Path.Direction.values()[parcel.readInt()];
+        parcel.readFloatArray(radii);
     }
 
     @Override
     protected int getOpId() {
-        return AbstractPathOp.ADD_RECT_OP;
+        return AbstractPathOp.ADD_ROUND_RECT_OP;
     }
 
     @Override
     void applyToPath(Path path) {
-        path.addRect(rect, dir);
+        path.addRoundRect(rect, radii, dir);
     }
 
     @Override
     void writeToParcel(Parcel parcel) {
         parcel.writeParcelable(rect, 0);
         parcel.writeInt(dir.ordinal());
+        parcel.writeFloatArray(radii);
     }
 
     @Override
@@ -77,19 +77,22 @@ class AddRectOp extends AbstractPathOp {
             return true;
         }
 
-        if(!(o instanceof AddRectOp)) {
+        if(!(o instanceof AddRoundRectOp)) {
             return false;
         }
 
-        AddRectOp other = (AddRectOp) o;
+        AddRoundRectOp other = (AddRoundRectOp) o;
 
-        return dir.equals(other.dir) && rect.equals(other.rect);
+        return rect.equals(other.rect) &&
+                Arrays.equals(radii, other.radii) &&
+                dir == other.dir;
     }
 
     @Override
     public int hashCode() {
-        int result = 31;
+        int result = 23;
         result = 31 * result + dir.hashCode();
+        result = 31 * result + Arrays.hashCode(radii);
         result = 31 * result + rect.hashCode();
         return result;
     }

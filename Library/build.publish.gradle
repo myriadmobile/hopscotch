@@ -68,19 +68,19 @@ uploadArchives {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
         pom.groupId = 'com.myriadmobile.library'
-        pom.artifactId = 'serializablepath'
+        pom.artifactId = 'hopscotch'
         pom.version = '0.9.4'
 
         pom.project {
-            name 'Serializable Path'
+            name 'Hopscotch'
             packaging 'jar' // We upload an jar as the primary, as we are not defining any resources
             description 'A drop in replacement for Android\'s Path which implements Serializable and Parcelable'
-            url 'https://github.com/myriadmobile/serializable-path'
+            url 'https://github.com/myriadmobile/hopscotch'
             //You need to provide this for Central
             scm {
-                url 'git@github.com:myriadmobile/serializable-path.git'
-                connection 'scm:git:git@github.com:myriadmobile/serializable-path.git'
-                developerConnection 'scm:git:git@github.com:myriadmobile/serializable-path.git'
+                url 'git@github.com:myriadmobile/hopscotch.git'
+                connection 'scm:git:git@github.com:myriadmobile/hopscotch.git'
+                developerConnection 'scm:git:git@github.com:myriadmobile/hopscotch.git'
             }
             //You need a license
             licenses {
