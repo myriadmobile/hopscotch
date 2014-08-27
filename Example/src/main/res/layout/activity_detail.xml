@@ -36,14 +36,14 @@
     tools:context=".DetailActivity">
 
 
-    <com.myriadmobile.serializablepath.example.SimplePathView
+    <com.myriadmobile.library.serializablepath.example.SimplePathView
         android:id="@+id/image_path1"
         android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
 
-    <com.myriadmobile.serializablepath.example.SimplePathView
+    <com.myriadmobile.library.serializablepath.example.SimplePathView
         android:id="@+id/image_path2"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:background="#FFF"

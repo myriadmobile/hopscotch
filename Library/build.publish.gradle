@@ -56,6 +56,7 @@ artifacts {
 
 uploadArchives {
     repositories.mavenDeployer {
+
         repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
             authentication(userName: sonatypeUsername, password: sonatypePassword)
         }
@@ -66,9 +67,9 @@ uploadArchives {
         */
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        pom.groupId = 'com.myriadmobile'
+        pom.groupId = 'com.myriadmobile.library'
         pom.artifactId = 'serializablepath'
-        pom.version = '0.9.3'
+        pom.version = '0.9.4'
 
         pom.project {
             name 'Serializable Path'

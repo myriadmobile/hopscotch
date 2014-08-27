@@ -6,11 +6,11 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.myriadmobile.serializablepath"
+        applicationId "com.myriadmobile.library.serializablepath"
         minSdkVersion 9
         targetSdkVersion 19
         versionCode 3
-        versionName "0.9.3"
+        versionName "0.9.4"
     }
 }
 
