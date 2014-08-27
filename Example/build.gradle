@@ -20,6 +20,6 @@ android {
 }
 
 dependencies {
-    compile project(':Library')
-    //compile 'com.myriadmobile.library:hopscotch:0.9.4'
+    //compile project(':Library')
+    compile 'com.myriadmobile.library:hopscotch:0.9.4'
 }
