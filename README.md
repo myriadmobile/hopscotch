@@ -5,6 +5,9 @@ Introduction
 
 Features
 -------
++ Implements Serializable
++ Implements Parcelable
++ Save Paths to storage for later
 
 Usage
 -------
